@@ -23,35 +23,41 @@ function playerCreate(x,y) {
         velocity: [0, 0],
         horizontalSpeed: 1,
         verticalSpeed: 1,
+        attachedHorizontalSpeed: 0,
+        attachedVerticalSpeed: 0,
         horAccel: 0,
         vertAccel: 0,
         animCounter: 0,
         jumpCounter: 0,
         direction: 'right',
-        bulletCreate() 
-        {
+        bulletCreate() {
             let bullet = {
-                x : player.origin[0] + player.dimensions[0],
-                y : player.origin[1] + (player.dimensions[1] / 2),
-                w : 10, 
-                h : 2,
+                origin: [player.origin[0] + player.dimensions[0], player.origin[1] + (player.dimensions[1] / 2)],
+                dimensions: [10, 2],
                 image : bulletImg,
                 shouldKeepShowingBullet: true,
-            
+                horizontalSpeed: 5,
+                direction: player.direction,
                 Draw () {
-                    context.drawImage(bullet.image, bullet.x, bullet.y, bullet.w,  bullet.h);
-                },
-            
+                        context.drawImage(bullet.image, bullet.origin[0], bullet.origin[1], bullet.dimensions[0],  bullet.dimensions[1]);
+                        context.setTransform(1, 0, 0, 1, 0, 0);
+                    }, 
                 Move() {
-                    if (bullet.x < 800){
-                        bullet.x+= 5;
-                        S_Pressed = false;
+                    if (bullet.origin[0] < 800 || bullet.origin > 0){
+                        if (bullet.direction === 'left'){
+                            bullet.origin[0] -= bullet.horizontalSpeed;
+                        }
+                        if (bullet.direction === 'right'){
+                            bullet.origin[0] += bullet.horizontalSpeed;
+                        }
                     } else {
                         bullet.shouldKeepShowingBullet = false;
-                        S_Pressed = true;
                     }
                       
                 }
+            }
+            if (bullet.direction === 'left'){
+                bullet.origin[0] = player.origin[0];
             }
             bulletArray.push(bullet);
         },
@@ -147,7 +153,6 @@ function Jump() {
     player.jumpCounter = 0;
     player.velocity[1] = 0;
         while (player.jumpCounter <= 1.2) {
-            console.log(player.jumpCounter);
             player.jumpCounter += .3;
             player.velocity[1] -= player.jumpCounter;
             
@@ -193,6 +198,12 @@ function playerGravity() {
     if (!player.isOnPlatform){
         player.velocity[1] += gravity;
     }
+    if (player.attachedHorizontalSpeed > 0){
+        player.velocity[0] += player.attachedHorizontalSpeed;
+    }
+    if (player.attachedVerticalSpeed > 0) {
+        player.velocity[1] += player.attachedVerticalSpeed;
+    }
 }
 function playerAcceleration() {
     counter++;
@@ -227,9 +238,11 @@ let InputHandler = (() => {
               break;
           case "ArrowDown":
               player.velocity[0] = 0;
+              break;
           case "z": 
               console.log('fired!!');
               player.bulletCreate();
+              break;
           case ' ':
               if (player.isOnPlatform)
               Jump();
