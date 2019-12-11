@@ -3,6 +3,7 @@ let player = {};
 let counter = 0;
 let gravity = .1;
 let walkAnimation = [];
+let bulletArray = [];
 let playerWalk1 = document.getElementById('walk1');
 let playerWalk2 = document.getElementById('walk2');
 let playerWalk3 = document.getElementById('walk3');
@@ -12,6 +13,7 @@ let playerWalk6 = document.getElementById('walk6');
 let playerWalk7 = document.getElementById('walk7');
 let playerWalk8 = document.getElementById('walk8');
 let playerWalk9 = document.getElementById('walk9');
+let bulletImg = document.getElementById('projectile');
 
 function playerCreate(x,y) {
     player = {
@@ -26,6 +28,33 @@ function playerCreate(x,y) {
         animCounter: 0,
         jumpCounter: 0,
         direction: 'right',
+        bulletCreate() 
+        {
+            let bullet = {
+                x : player.origin[0] + player.dimensions[0],
+                y : player.origin[1] + (player.dimensions[1] / 2),
+                w : 10, 
+                h : 2,
+                image : bulletImg,
+                shouldKeepShowingBullet: true,
+            
+                Draw () {
+                    context.drawImage(bullet.image, bullet.x, bullet.y, bullet.w,  bullet.h);
+                },
+            
+                Move() {
+                    if (bullet.x < 800){
+                        bullet.x+= 5;
+                        S_Pressed = false;
+                    } else {
+                        bullet.shouldKeepShowingBullet = false;
+                        S_Pressed = true;
+                    }
+                      
+                }
+            }
+            bulletArray.push(bullet);
+        },
         isOnPlatform: false,
         canJump: false,
         Draw() {
@@ -129,7 +158,6 @@ function Jump() {
         }
         player.isOnPlatform = false;
 }
-
 function playerWalk() {
     player.animCounter += 3;
     if (player.animCounter === 3){
@@ -197,6 +225,11 @@ let InputHandler = (() => {
               break;
           case "ArrowUp":
               break;
+          case "ArrowDown":
+              player.velocity[0] = 0;
+          case "z": 
+              console.log('fired!!');
+              player.bulletCreate();
           case ' ':
               if (player.isOnPlatform)
               Jump();
@@ -204,6 +237,7 @@ let InputHandler = (() => {
           default:
             }
       })
+   
     document.addEventListener("keyup", event => {
       switch (event.key) {
           case "ArrowLeft":
