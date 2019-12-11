@@ -44,7 +44,7 @@ function deleteObjects() {
 function gameLoop() {
     drawObjects();
     moveObjects();
-    console.log(bulletArray.length);
+    playerGravity();
     window.requestAnimationFrame(gameLoop);
 }
 gameLoop();
