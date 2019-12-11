@@ -10,13 +10,15 @@ assignAttributes(source, { // this makes the canvas fit in the window
 })
 document.body.appendChild(source) // adds the canvas to the webpage
 const context = source.getContext('2d', {alpha: 'false'})
+const background = document.getElementById('background');
 
 // function drawBackground() {
 // }
 
 function drawObjects() {
     context.clearRect(0, 0, 800, 600);
-    source.style.background = 'black';
+    document.body.style.backgroundImage = "url('assets/background_bricks.png')"; 
+
     player.Draw();
     // currentPlayers.forEach(player => {
     //     player.Draw();
