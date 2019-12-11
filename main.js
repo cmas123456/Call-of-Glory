@@ -35,6 +35,7 @@ function moveObjects() {
 function gameLoop() {
     drawObjects();
     moveObjects();
+    playerGravity();
     window.requestAnimationFrame(gameLoop);
 }
 gameLoop();

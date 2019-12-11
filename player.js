@@ -1,6 +1,7 @@
 let currentPlayers = [];
 let player = {};
 let counter = 0;
+let gravity = .1;
 let walkAnimation = [];
 let playerWalk1 = document.getElementById('walk1');
 let playerWalk2 = document.getElementById('walk2');
@@ -23,7 +24,10 @@ function playerCreate(x,y) {
         horAccel: 0,
         vertAccel: 0,
         animCounter: 0,
+        jumpCounter: 0,
         direction: 'right',
+        isOnPlatform: false,
+        canJump: false,
         Draw() {
             if (player.velocity[0] === 0){
                 if (player.direction === 'right'){
@@ -32,7 +36,6 @@ function playerCreate(x,y) {
                     context.setTransform(1, 0, 0, 1, 0, 0);
                 }
                 else if (player.direction === 'left'){
-                    console.log('can you happen?');
                     context.scale(-1, 1);
                     context.drawImage(player.image, -player.origin[0] - player.dimensions[0], player.origin[1], player.dimensions[0], player.dimensions[1]);
                     context.setTransform(1, 0, 0, 1, 0, 0);
@@ -52,6 +55,7 @@ function playerCreate(x,y) {
         Move() {
             let nextX = player.origin[0] + player.velocity[0];
             let nextY = player.origin[1] + player.velocity[1];
+            let isPlayerOnPlatform = false;
             
             if (player.velocity[1] === 0) {
                 nextY = player.origin[1];
@@ -67,43 +71,65 @@ function playerCreate(x,y) {
                 
                 
                 if ((player.origin[0] > leftSide && player.origin[0] < rightSide) || 
-                    (player.origin[0] + player.dimensions[0]) < rightSide && (player.origin[0] + player.dimensions[0] > leftSide)){
+                    (player.origin[0] + player.dimensions[0]) < rightSide && (player.origin[0] + player.dimensions[0] > leftSide)||
+                    (player.origin[0] + (player.dimensions[0] / 2 ) < rightSide && (player.origin[0] + (player.dimensions[0] / 2) > leftSide))){
                         //collision top of platform
                         if (player.velocity[1] > 0) {
                             if (nextY + player.dimensions[1] > topSide && nextY + player.dimensions[1] < bottomSide) {
                                 nextY = topSide - player.dimensions[1] - 1;
+                                isPlayerOnPlatform = true;
                             }
                         }
                         //collision bot of platform
                         else if (player.velocity[1] < 0) {
                             if (nextY > topSide && nextY < bottomSide){
                                 nextY = bottomSide + 1;
+                                player.velocity[1] = 0;
                             }
                         }
                     }
                 if ((player.origin[1] >= topSide && player.origin[1] <= bottomSide) || 
-                    (player.origin[1] + player.dimensions[1] >= topSide && player.origin[1] + player.dimensions[1] <= bottomSide)||
+                    (player.origin[1] + player.dimensions[1] - 2 >= topSide && player.origin[1] + player.dimensions[1] <= bottomSide)||
                     (player.origin[1] + (player.dimensions[1] / 2) >= topSide) && player.origin[1] + (player.dimensions[1] / 2) <= bottomSide){
                         //collision left of platform
                         if (player.velocity[0] > 0) {
                             if (nextX + player.dimensions[0] > leftSide && nextX + player.dimensions[0] < rightSide) {
                                 nextX = leftSide - player.dimensions[0];
+                                player.velocity[0] = 0;
                             }
                         }
                         //collision right of platform
                         else if (player.velocity[0] < 0) {
                             if (nextX > leftSide && nextX < rightSide){
                                 nextX = rightSide + 1;
+                                player.velocity[0] = 0;
                             }
                         }
                     }
                 
             })
+            player.isOnPlatform = isPlayerOnPlatform;
             player.origin[0] = nextX;
             player.origin[1] = nextY;
         }
     }
 }
+function Jump() {
+    player.jumpCounter = 0;
+    player.velocity[1] = 0;
+        while (player.jumpCounter <= 1.2) {
+            console.log(player.jumpCounter);
+            player.jumpCounter += .3;
+            player.velocity[1] -= player.jumpCounter;
+            
+            if (player.jumpCounter > 1.2) {
+                player.jumpCounter = 0;
+                break;
+            } 
+        }
+        player.isOnPlatform = false;
+}
+
 function playerWalk() {
     player.animCounter += 3;
     if (player.animCounter === 3){
@@ -135,11 +161,14 @@ function playerWalk() {
     player.image = playerWalk1;
     }
 }
+function playerGravity() {
+    if (!player.isOnPlatform){
+        player.velocity[1] += gravity;
+    }
+}
 function playerAcceleration() {
     counter++;
-    console.log(counter);
     if (counter === 5){
-        console.log('accelerate');
         player.horAccel += .15;
     }
     if (counter === 10){
@@ -167,10 +196,11 @@ let InputHandler = (() => {
               player.velocity[0] = player.horizontalSpeed + player.horAccel;
               break;
           case "ArrowUp":
-              player.velocity[1] = -player.verticalSpeed;
               break;
-          case "ArrowDown":
-              player.velocity[1] = player.verticalSpeed;
+          case ' ':
+              if (player.isOnPlatform)
+              Jump();
+              break;
           default:
             }
       })
@@ -181,16 +211,16 @@ let InputHandler = (() => {
               player.horAccel = 0;
               player.velocity[0] = 0;
               player.animCounter = 0;
+              break;
           case "ArrowRight":
               player.horAccel = 0;
               counter = 0;
               player.velocity[0] = 0;
               player.animCounter = 0;
-          case "ArrowUp":
-              player.velocity[1] = 0;
               break;
-          case "ArrowDown":
-              player.velocity[1] = 0;
+          case "ArrowUp":
+              break;
+          case ' ':
               break;
           default:       
       }
