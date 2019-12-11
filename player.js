@@ -23,9 +23,20 @@ function playerCreate(x,y) {
         horAccel: 0,
         vertAccel: 0,
         animCounter: 0,
+        direction: 'right',
         Draw() {
             if (player.velocity[0] === 0){
-                context.drawImage(player.image, player.origin[0], player.origin[1], player.dimensions[0], player.dimensions[1]);
+                if (player.direction === 'right'){
+                    context.scale(1, 1);
+                    context.drawImage(player.image, player.origin[0], player.origin[1], player.dimensions[0], player.dimensions[1]);
+                    context.setTransform(1, 0, 0, 1, 0, 0);
+                }
+                else if (player.direction === 'left'){
+                    console.log('can you happen?');
+                    context.scale(-1, 1);
+                    context.drawImage(player.image, -player.origin[0] - player.dimensions[0], player.origin[1], player.dimensions[0], player.dimensions[1]);
+                    context.setTransform(1, 0, 0, 1, 0, 0);
+                }
             }
             if (player.velocity[0] > 0) {
                 context.scale(1, 1);
@@ -146,11 +157,13 @@ let InputHandler = (() => {
           case "ArrowLeft":
               playerAcceleration();
               playerWalk();
+              player.direction = 'left';
               player.velocity[0] = -player.horizontalSpeed - player.horAccel;
               break;
           case "ArrowRight":
               playerAcceleration();
               playerWalk();
+              player.direction = 'right';
               player.velocity[0] = player.horizontalSpeed + player.horAccel;
               break;
           case "ArrowUp":
