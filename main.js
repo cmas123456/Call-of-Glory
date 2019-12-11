@@ -24,6 +24,9 @@ function drawObjects() {
     levelWalls.forEach(wall => {
         wall.Draw();
     })
+    bulletArray.forEach(bullet => {
+        bullet.Draw();
+    })
 }
 
 function moveObjects() {
@@ -31,10 +34,17 @@ function moveObjects() {
     currentPlayers.forEach(player => {
         player.Move();
     })
+    bulletArray.forEach(bullet => {
+        bullet.Move();
+    })
+}
+function deleteObjects() {
+    bulletArray.filter(bullet => !bullet.shouldKeepShowingBullet);
 }
 function gameLoop() {
     drawObjects();
     moveObjects();
+    console.log(bulletArray.length);
     window.requestAnimationFrame(gameLoop);
 }
 gameLoop();

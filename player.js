@@ -2,6 +2,7 @@ let currentPlayers = [];
 let player = {};
 let counter = 0;
 let walkAnimation = [];
+let bulletArray = [];
 let playerWalk1 = document.getElementById('walk1');
 let playerWalk2 = document.getElementById('walk2');
 let playerWalk3 = document.getElementById('walk3');
@@ -11,6 +12,7 @@ let playerWalk6 = document.getElementById('walk6');
 let playerWalk7 = document.getElementById('walk7');
 let playerWalk8 = document.getElementById('walk8');
 let playerWalk9 = document.getElementById('walk9');
+let bulletImg = document.getElementById('projectile');
 
 function playerCreate(x,y) {
     player = {
@@ -24,6 +26,33 @@ function playerCreate(x,y) {
         vertAccel: 0,
         animCounter: 0,
         direction: 'right',
+        bulletCreate() 
+        {
+            let bullet = {
+                x : player.origin[0] + player.dimensions[0],
+                y : player.origin[1] + (player.dimensions[1] / 2),
+                w : 10, 
+                h : 2,
+                image : bulletImg,
+                shouldKeepShowingBullet: true,
+            
+                Draw () {
+                    context.drawImage(bullet.image, bullet.x, bullet.y, bullet.w,  bullet.h);
+                },
+            
+                Move() {
+                    if (bullet.x < 800){
+                        bullet.x+= 5;
+                        S_Pressed = false;
+                    } else {
+                        bullet.shouldKeepShowingBullet = false;
+                        S_Pressed = true;
+                    }
+                      
+                }
+            }
+            bulletArray.push(bullet);
+        },
         Draw() {
             if (player.velocity[0] === 0){
                 if (player.direction === 'right'){
@@ -32,6 +61,7 @@ function playerCreate(x,y) {
                     context.setTransform(1, 0, 0, 1, 0, 0);
                 }
                 else if (player.direction === 'left'){
+                    console.log(bulletArray);
                     console.log('can you happen?');
                     context.scale(-1, 1);
                     context.drawImage(player.image, -player.origin[0] - player.dimensions[0], player.origin[1], player.dimensions[0], player.dimensions[1]);
@@ -104,6 +134,7 @@ function playerCreate(x,y) {
         }
     }
 }
+
 function playerWalk() {
     player.animCounter += 3;
     if (player.animCounter === 3){
@@ -171,9 +202,14 @@ let InputHandler = (() => {
               break;
           case "ArrowDown":
               player.velocity[1] = player.verticalSpeed;
+          case "z": 
+              console.log('fired!!');
+              player.bulletCreate();
+              break;
           default:
             }
       })
+   
     document.addEventListener("keyup", event => {
       switch (event.key) {
           case "ArrowLeft":
