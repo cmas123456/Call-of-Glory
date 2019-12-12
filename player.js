@@ -248,7 +248,6 @@ let InputHandler = (() => {
               player.velocity[0] = 0;
               break;
           case "z": 
-              console.log('fired!!');
               player.bulletCreate();
               break;
           case ' ':
