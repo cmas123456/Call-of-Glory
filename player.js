@@ -38,19 +38,42 @@ function playerCreate(x,y) {
                 image : bulletImg,
                 shouldKeepShowingBullet: true,
                 horizontalSpeed: 5,
+                travelDistance: 0,
+                gravity: 1,
                 direction: player.direction,
                 Draw () {
                         context.drawImage(bullet.image, bullet.origin[0], bullet.origin[1], bullet.dimensions[0],  bullet.dimensions[1]);
                     }, 
                 Move() {
-                    if (bullet.origin[0] < 800 || bullet.origin > 0){
+                    if (bullet.origin[0] < 800 && bullet.origin[0] > 0){
                         if (bullet.direction === 'left'){
                             bullet.origin[0] -= bullet.horizontalSpeed;
+                            bullet.travelDistance += bullet.horizontalSpeed;
+                            if (bullet.travelDistance > 100) {
+                                bullet.origin[1] += bullet.gravity;
+                                if (bullet.travelDistance > 200) {
+                                    bullet.origin[1] += bullet.gravity
+                                    if (bullet.travelDistance > 300) {
+                                        bullet.origin[1] += bullet.gravity;
+                                    }
+                                }
+                            }
                         }
-                        if (bullet.direction === 'right'){
-                            bullet.origin[0] += bullet.horizontalSpeed;
+                    if (bullet.direction === 'right'){
+                        bullet.origin[0] += bullet.horizontalSpeed;
+                        bullet.travelDistance += bullet.horizontalSpeed;
+                        if (bullet.travelDistance > 100){
+                            bullet.origin[1] += bullet.gravity;
+                            if (bullet.travelDistance > 200) {
+                                bullet.origin[1] += bullet.gravity;
+                                if (bullet.travelDistance > 300) {
+                                    bullet.origin[1] += bullet.gravity;
+                                }
+                            }
                         }
+                    }
                     } else {
+                        console.log('offscreen');
                         bullet.shouldKeepShowingBullet = false;
                     }
                       
@@ -218,6 +241,27 @@ function playerAcceleration() {
     }
 }
 
+function bulletDetection() {
+    bulletArray.forEach(bullet => {
+        let leftSide = bullet.origin[0];
+        let rightSide = bullet.origin[0] + bullet.dimensions[0];
+        let topSide = bullet.origin[1];
+        let botSide = bullet.origin[1] + bullet.dimensions[0]
+        levelWalls.forEach(wall => {
+            let left = wall.origin[0];
+            let right = wall.origin[0] + wall.dimensions[0];
+            let top = wall.origin[1];
+            let bot = wall.origin[1] + wall.dimensions[1];
+            if ((leftSide >= left && leftSide <= right) || (rightSide >= left && rightSide <= left)) {
+                console.log('outer success');
+                if ((topSide >= top && topSide <= bot) || botSide >= top && botSide <= bot) {
+                    console.log('success');
+                    bullet.shouldKeepShowingBullet = false;
+                }
+            } 
+        })
+    })
+}
 function isDead() {
     if (player.origin[0] < -50 || player.origin[0] > 850 || player.origin[1] > 700) {
         player.lives--;
