@@ -13,7 +13,6 @@ const gamepadDisplay = document.getElementById('gamepad-display');
 
 document.body.appendChild(source) // adds the canvas to the webpage
 const context = source.getContext('2d', {alpha: 'false'})
-const background = document.getElementById('background');
 
 // function drawBackground() {
 // }
@@ -29,6 +28,8 @@ function drawObjects() {
     // })
     levelWalls.forEach(wall => {
         wall.Draw();
+        //wall.Move()
+        
     })
     bulletArray.forEach(bullet => {
         bullet.Draw();
@@ -37,9 +38,9 @@ function drawObjects() {
 
 function moveObjects() {
     player.Move();
-    currentPlayers.forEach(player => {
-        player.Move();
-    })
+    // currentPlayers.forEach(player => {
+    //     player.Move();
+    // })
     bulletArray.forEach(bullet => {
         bullet.Move(    );
     })
@@ -118,6 +119,8 @@ function gameLoop() {
     drawObjects();
     moveObjects();
     playerGravity();
+    gravitys();
+    isOnTop();
     isDead();
     window.requestAnimationFrame(gameLoop);
 }
