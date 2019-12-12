@@ -230,29 +230,25 @@ playerCreate(50,200);
 let InputHandler = (() => {
     document.addEventListener("keydown", event => {
       switch (event.key) {
-          case "ArrowLeft":
-              playerAcceleration();
-              playerWalk();
-              player.direction = 'left';
-              player.velocity[0] = -player.horizontalSpeed - player.horAccel;
-              break;
-          case "ArrowRight":
-              playerAcceleration();
-              playerWalk();
-              player.direction = 'right';
-              player.velocity[0] = player.horizontalSpeed + player.horAccel;
-              break;
+        //   case "ArrowLeft":
+        //       playerAcceleration();
+        //       playerWalk();
+        //       player.direction = 'left';
+        //       player.velocity[0] = -player.horizontalSpeed - player.horAccel;
+        //       break;
+        //   case "ArrowRight":
+        //       playerAcceleration();
+        //       playerWalk();
+        //       player.direction = 'right';
+        //       player.velocity[0] = player.horizontalSpeed + player.horAccel;
+        //       break;
           case "ArrowUp":
               break;
           case "ArrowDown":
-              player.velocity[0] = 0;
               break;
           case "z": 
-              player.bulletCreate();
               break;
           case ' ':
-              if (player.isOnPlatform)
-              Jump();
               break;
           default:
             }
@@ -260,18 +256,18 @@ let InputHandler = (() => {
    
     document.addEventListener("keyup", event => {
       switch (event.key) {
-          case "ArrowLeft":
-              counter = 0;
-              player.horAccel = 0;
-              player.velocity[0] = 0;
-              player.animCounter = 0;
-              break;
-          case "ArrowRight":
-              player.horAccel = 0;
-              counter = 0;
-              player.velocity[0] = 0;
-              player.animCounter = 0;
-              break;
+        //   case "ArrowLeft":
+        //       counter = 0;
+        //       player.horAccel = 0;
+        //       player.velocity[0] = 0;
+        //       player.animCounter = 0;
+        //       break;
+        //   case "ArrowRight":
+        //       player.horAccel = 0;
+        //       counter = 0;
+        //       player.velocity[0] = 0;
+        //       player.animCounter = 0;
+        //       break;
           case "ArrowUp":
               break;
           case ' ':
