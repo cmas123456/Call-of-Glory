@@ -40,7 +40,6 @@ function playerCreate(x,y) {
                 direction: player.direction,
                 Draw () {
                         context.drawImage(bullet.image, bullet.origin[0], bullet.origin[1], bullet.dimensions[0],  bullet.dimensions[1]);
-                        context.setTransform(1, 0, 0, 1, 0, 0);
                     }, 
                 Move() {
                     if (bullet.origin[0] < 800 || bullet.origin > 0){

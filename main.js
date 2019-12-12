@@ -17,7 +17,8 @@ const background = document.getElementById('background');
 
 function drawObjects() {
     context.clearRect(0, 0, 800, 600);
-    document.body.style.backgroundImage = "url('assets/background_bricks.png')"; 
+    context.drawImage(background, 0,0,800,600);
+    // document.body.style.backgroundImage = "url('assets/background_bricks.png')"; 
 
     player.Draw();
     // currentPlayers.forEach(player => {
@@ -37,7 +38,7 @@ function moveObjects() {
         player.Move();
     })
     bulletArray.forEach(bullet => {
-        bullet.Move();
+        bullet.Move(    );
     })
 }
 function deleteObjects() {

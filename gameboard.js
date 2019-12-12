@@ -1,12 +1,18 @@
 let levelWalls = [];
+let platformImg = document.getElementById('platform');
 
-function createWalls(x, y, width, height) {
+function createWalls(x, y, width, height, imageID = null) {
     wall = {
         origin: [x, y],
         dimensions: [width, height],
+        image: imageID,
         Draw(){
-            context.fillStyle = 'Brown';
-            context.fillRect(this.origin[0], this.origin[1], this.dimensions[0], this.dimensions[1]);
+            if (imageID !== null){
+                context.drawImage(this.image, this.origin[0],this.origin[1],this.dimensions[0],this.dimensions[1]);
+            } else {
+                context.fillStyle = 'Brown';
+                context.fillRect(this.origin[0], this.origin[1], this.dimensions[0], this.dimensions[1]);
+            }
         }
     }
     levelWalls.push(wall);
@@ -14,32 +20,32 @@ function createWalls(x, y, width, height) {
 
 function levelOne () {
     //draw  first 
-    createWalls(50,500,100,20);
+    createWalls(50,500,100,20, platformImg);
     createWalls(100 ,480 ,20 ,20);
-    createWalls(200,500,100,20);
+    createWalls(200,500,100,20, platformImg);
     createWalls(250,480 ,20,20);
-    createWalls(350 ,500,100,20);
+    createWalls(350 ,500,100,20, platformImg);
     createWalls(400 ,480 ,20 ,20);
-    createWalls(500 ,500,100,20);
+    createWalls(500 ,500,100,20, platformImg);
     createWalls(550 ,480,20,20);
-    createWalls(650,500,100,20);
+    createWalls(650,500,100,20, platformImg);
     createWalls(660,480 ,20,20);
  
     //draw second
-    createWalls(135 , 400 , 75 , 20);
+    createWalls(135 , 400 , 75 , 20, platformImg);
     createWalls(190 , 380 , 20 , 20);
-    createWalls(285 , 400 , 75 , 20);
+    createWalls(285 , 400 , 75 , 20, platformImg);
     createWalls(340 , 380 , 20 , 20);
-    createWalls(435 , 400 , 75 , 20);
+    createWalls(435 , 400 , 75 , 20, platformImg);
     createWalls(435 , 380 , 20 , 20);
-    createWalls(580  , 400 , 75 , 20);
+    createWalls(580  , 400 , 75 , 20, platformImg);
     createWalls(580 , 380 , 20 , 20);
  
     //draw third 
  
     createWalls(225 , 300 , 50 , 20);
     createWalls(255 , 260 , 20 , 40);
-    createWalls(340 , 300 , 75 , 20);
+    createWalls(340 , 300 , 75 , 20, platformImg);
     createWalls(500 , 300 , 50 , 20);
     createWalls(500 , 260 , 20 , 40);
  
