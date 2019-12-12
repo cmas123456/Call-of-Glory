@@ -114,6 +114,7 @@ function gameLoop() {
         }
         gamepadDisplay.textContent = JSON.stringify(gamepadState, null, 2)
     }
+
     drawObjects();
     moveObjects();
     playerGravity();
