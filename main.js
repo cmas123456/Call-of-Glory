@@ -8,6 +8,9 @@ assignAttributes(source, { // this makes the canvas fit in the window
 	height: 600,
 	width: 800,
 })
+
+const gamepads = navigator.getGamepads();
+
 document.body.appendChild(source) // adds the canvas to the webpage
 const context = source.getContext('2d', {alpha: 'false'})
 const background = document.getElementById('background');
@@ -45,10 +48,20 @@ function deleteObjects() {
     bulletArray.filter(bullet => !bullet.shouldKeepShowingBullet);
 }
 function gameLoop() {
+    //console.log(gamepads)
     drawObjects();
     moveObjects();
     playerGravity();
     isDead();
     window.requestAnimationFrame(gameLoop);
 }
+window.addEventListener('gamepadconnected', event => {
+     console.log('Gamepad connected:')
+     console.log(event.gamepad)
+})
+
+window.addEventListener('gamepaddisconnected', event => {
+    console.log('Gamepad connected:')
+    console.log(event.gamepad)
+})
 gameLoop();
