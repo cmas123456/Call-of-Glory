@@ -19,52 +19,42 @@ const context = source.getContext('2d', {alpha: 'false'})
 
 function drawObjects() {
     context.clearRect(0, 0, 800, 600);
-<<<<<<< HEAD
-    source.style.background = 'black';
-=======
     context.drawImage(background, 0,0,800,600);
->>>>>>> 952b7c2d8003461506beffebed4fae4a2e4e715f
     player.Draw();
     // currentPlayers.forEach(player => {
     //     player.Draw();
     // })
     levelWalls.forEach(wall => {
         wall.Draw();
-        //wall.Move();
+        //wall.Move()
         
+    })
+    bulletArray.forEach(bullet => {
+        bullet.Draw();
     })
 }
 
 function moveObjects() {
     player.Move();
-    currentPlayers.forEach(player => {
-        player.Move();
-    })
-<<<<<<< HEAD
-
-   
-=======
+    // currentPlayers.forEach(player => {
+    //     player.Move();
+    // })
     bulletArray.forEach(bullet => {
         bullet.Move();
     })
 }
 function deleteObjects() {
    bulletArray = bulletArray.filter(bullet => bullet.shouldKeepShowingBullet);
->>>>>>> 952b7c2d8003461506beffebed4fae4a2e4e715f
 }
 function gameLoop() {
     drawObjects();
     moveObjects();
-<<<<<<< HEAD
-    playerGravity()
-isOnTop();
-   gravitys();
-=======
     bulletDetection();
     deleteObjects();
     playerGravity();
+    gravitys();
+    isOnTop();
     isDead();
->>>>>>> 952b7c2d8003461506beffebed4fae4a2e4e715f
     window.requestAnimationFrame(gameLoop);
 }
 window.addEventListener('gamepadconnected', event => {

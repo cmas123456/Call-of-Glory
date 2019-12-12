@@ -1,4 +1,4 @@
-let currentPlayers = [];
+// let currentPlayers = [];
 let player = {};
 let counter = 0;
 let gravity = .1;
