@@ -10,25 +10,21 @@ assignAttributes(source, { // this makes the canvas fit in the window
 })
 document.body.appendChild(source) // adds the canvas to the webpage
 const context = source.getContext('2d', {alpha: 'false'})
-const background = document.getElementById('background');
 
 // function drawBackground() {
 // }
 
 function drawObjects() {
     context.clearRect(0, 0, 800, 600);
-    context.drawImage(background, 0,0,800,600);
-    // document.body.style.backgroundImage = "url('assets/background_bricks.png')"; 
-
+    source.style.background = 'black';
     player.Draw();
     // currentPlayers.forEach(player => {
     //     player.Draw();
     // })
     levelWalls.forEach(wall => {
         wall.Draw();
-    })
-    bulletArray.forEach(bullet => {
-        bullet.Draw();
+        //wall.Move();
+        
     })
 }
 
@@ -37,18 +33,15 @@ function moveObjects() {
     currentPlayers.forEach(player => {
         player.Move();
     })
-    bulletArray.forEach(bullet => {
-        bullet.Move(    );
-    })
-}
-function deleteObjects() {
-    bulletArray.filter(bullet => !bullet.shouldKeepShowingBullet);
+
+   
 }
 function gameLoop() {
     drawObjects();
     moveObjects();
-    playerGravity();
-    isDead();
+    playerGravity()
+isOnTop();
+   gravitys();
     window.requestAnimationFrame(gameLoop);
 }
 gameLoop();

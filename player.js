@@ -103,6 +103,7 @@ function playerCreate(x,y) {
                 let rightSide = wall.origin[0] + wall.dimensions[0];
                 let bottomSide = wall.origin[1] + wall.dimensions[1];
                 let topSide = wall.origin[1];
+                wall.isOnPlatform = false;
                 
                 
                 if ((player.origin[0] > leftSide && player.origin[0] < rightSide) || 
@@ -113,6 +114,7 @@ function playerCreate(x,y) {
                             if (nextY + player.dimensions[1] > topSide && nextY + player.dimensions[1] < bottomSide) {
                                 nextY = topSide - player.dimensions[1] - 1;
                                 isPlayerOnPlatform = true;
+                                wall.isOnPlatform = true;
                             }
                         }
                         //collision bot of platform
@@ -128,8 +130,13 @@ function playerCreate(x,y) {
                     (player.origin[1] + (player.dimensions[1] / 2) >= topSide) && player.origin[1] + (player.dimensions[1] / 2) <= bottomSide){
                         //collision left of platform
                         if (player.velocity[0] > 0) {
+
+
                             if (nextX + player.dimensions[0] > leftSide && nextX + player.dimensions[0] < rightSide) {
                                 nextX = leftSide - player.dimensions[0];
+                                if (wall.canPush){
+                                    wall.origin[0] += player.velocity[0];
+                                }
                                 player.velocity[0] = 0;
                             }
                         }
@@ -137,6 +144,10 @@ function playerCreate(x,y) {
                         else if (player.velocity[0] < 0) {
                             if (nextX > leftSide && nextX < rightSide){
                                 nextX = rightSide + 1;
+
+                                if (wall.canPush){
+                                    wall.origin[0] += player.velocity[0];
+                                }
                                 player.velocity[0] = 0;
                             }
                         }
