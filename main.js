@@ -48,6 +48,7 @@ function gameLoop() {
     drawObjects();
     moveObjects();
     playerGravity();
+    isDead();
     window.requestAnimationFrame(gameLoop);
 }
 gameLoop();

@@ -23,6 +23,7 @@ function playerCreate(x,y) {
         velocity: [0, 0],
         horizontalSpeed: 1,
         verticalSpeed: 1,
+        lives: 5,
         attachedHorizontalSpeed: 0,
         attachedVerticalSpeed: 0,
         horAccel: 0,
@@ -214,6 +215,14 @@ function playerAcceleration() {
     }
     if (counter === 20){
         player.horAccel += .2;
+    }
+}
+
+function isDead() {
+    if (player.origin[0] < -50 || player.origin[0] > 850 || player.origin[1] > 700) {
+        player.lives--;
+        player.origin[0] = 50;
+        player.origin[1] = 200;
     }
 }
 playerCreate(50,200);

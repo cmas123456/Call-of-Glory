@@ -1,5 +1,6 @@
 let levelWalls = [];
 let platformImg = document.getElementById('platform');
+let crateImg = document.getElementById('crate');
 
 function createWalls(x, y, width, height, imageID = null) {
     wall = {
@@ -21,25 +22,25 @@ function createWalls(x, y, width, height, imageID = null) {
 function levelOne () {
     //draw  first 
     createWalls(50,500,100,20, platformImg);
-    createWalls(100 ,480 ,20 ,20);
+    createWalls(100 ,480 ,20 ,20,crateImg);
     createWalls(200,500,100,20, platformImg);
-    createWalls(250,480 ,20,20);
+    createWalls(250,480 ,20,20,crateImg);
     createWalls(350 ,500,100,20, platformImg);
-    createWalls(400 ,480 ,20 ,20);
+    createWalls(400 ,480 ,20 ,20,crateImg);
     createWalls(500 ,500,100,20, platformImg);
-    createWalls(550 ,480,20,20);
+    createWalls(550 ,480,20,20,crateImg);
     createWalls(650,500,100,20, platformImg);
-    createWalls(660,480 ,20,20);
+    createWalls(660,480 ,20,20,crateImg);
  
     //draw second
     createWalls(135 , 400 , 75 , 20, platformImg);
-    createWalls(190 , 380 , 20 , 20);
+    createWalls(190 , 380 , 20 , 20,crateImg);
     createWalls(285 , 400 , 75 , 20, platformImg);
-    createWalls(340 , 380 , 20 , 20);
+    createWalls(340 , 380 , 20 , 20,crateImg);
     createWalls(435 , 400 , 75 , 20, platformImg);
-    createWalls(435 , 380 , 20 , 20);
+    createWalls(435 , 380 , 20 , 20,crateImg);
     createWalls(580  , 400 , 75 , 20, platformImg);
-    createWalls(580 , 380 , 20 , 20);
+    createWalls(580 , 380 , 20 , 20,crateImg);
  
     //draw third 
  
