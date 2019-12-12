@@ -8,6 +8,8 @@ assignAttributes(source, { // this makes the canvas fit in the window
 	height: 600,
 	width: 800,
 })
+let controllerRight = false;
+let controllerLeft = false;
 
 const gamepadDisplay = document.getElementById('gamepad-display');
 
@@ -46,7 +48,7 @@ function moveObjects() {
     })
 }
 function deleteObjects() {
-    bulletArray.filter(bullet => !bullet.shouldKeepShowingBullet);
+    bulletArray = bulletArray.filter(bullet => bullet.shouldKeepShowingBullet);
 }
 function gameLoop() {
     const gamepads = navigator.getGamepads();
@@ -79,27 +81,44 @@ function gameLoop() {
                 {buttons_15: gamepads[0].buttons[15].pressed}
             ],
         }
-        if(gamepads[0].buttons[15].pressed)
-        {
+        if(gamepads[0].buttons[15].pressed){
             playerAcceleration();
-              playerWalk();
-              player.direction = 'right';
-              player.velocity[0] = player.horizontalSpeed + player.horAccel;
+            playerWalk();
+            player.direction = 'right';
+            controllerRight = true;
+            player.velocity[0] = player.horizontalSpeed + player.horAccel;
         }
-        else if (gamepads[0].buttons[15].pressed === false)
-        {
+        else if (gamepads[0].buttons[15].pressed === false && controllerRight === true){
             counter = 0;
               player.horAccel = 0;
               player.velocity[0] = 0;
               player.animCounter = 0;
+              controllerRight = false;
         }
-        if (gamepads[0].buttons[14].pressed)
-        {
+        if (gamepads[0].buttons[14].pressed){
             playerAcceleration();
-              playerWalk();
-              player.direction = 'left';
-              player.velocity[0] = -player.horizontalSpeed - player.horAccel;
+            playerWalk();
+            player.direction = 'left';
+            controllerLeft = true;
+            console.log(player.direction);
+            player.velocity[0] = -player.horizontalSpeed - player.horAccel;
         }
+        else if (gamepads[0].buttons[14].pressed === false && controllerLeft === true){
+          console.log('it happened');
+          counter = 0;
+          player.horAccel = 0;
+          player.velocity[0] = 0;
+          console.log(player.animCounter);
+          player.animCounter = 0;
+          controllerLeft = false;
+        }
+        // else if (gamepads[0].buttons[14].pressed === false)
+        // {
+        //     counter = 0;
+        //       player.horAccel = 0;
+        //       player.velocity[0] = 0;
+        //       player.animCounter = 0;
+        // }
         if (gamepads[0].buttons[13].pressed)
         {
             player.velocity[0] = 0;
@@ -113,11 +132,13 @@ function gameLoop() {
         {
             player.bulletCreate();
         }
-        gamepadDisplay.textContent = JSON.stringify(gamepadState, null, 2)
+        gamepadDisplay.textContent = JSON.stringify(gamepadState, null, 2);
     }
 
     drawObjects();
     moveObjects();
+    bulletDetection();
+    deleteObjects()
     playerGravity();
     gravitys();
     isOnTop();

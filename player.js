@@ -73,7 +73,6 @@ function playerCreate(x,y) {
                         }
                     }
                     } else {
-                        console.log('offscreen');
                         bullet.shouldKeepShowingBullet = false;
                     }
                       
@@ -253,6 +252,7 @@ function playerAcceleration() {
 }
 
 function bulletDetection() {
+    console.log('this is being called');
     bulletArray.forEach(bullet => {
         let leftSide = bullet.origin[0];
         let rightSide = bullet.origin[0] + bullet.dimensions[0];
@@ -263,7 +263,7 @@ function bulletDetection() {
             let right = wall.origin[0] + wall.dimensions[0];
             let top = wall.origin[1];
             let bot = wall.origin[1] + wall.dimensions[1];
-            if ((leftSide >= left && leftSide <= right) || (rightSide >= left && rightSide <= left)) {
+            if ((leftSide >= left && leftSide <= right) || (rightSide >= left && rightSide <= right)) {
                 console.log('outer success');
                 if ((topSide >= top && topSide <= bot) || botSide >= top && botSide <= bot) {
                     console.log('success');
