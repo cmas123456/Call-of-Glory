@@ -21,6 +21,8 @@ const background = document.getElementById('background');
 function drawObjects() {
     context.clearRect(0, 0, 800, 600);
     context.drawImage(background, 0,0,800,600);
+    // document.body.style.backgroundImage = "url('assets/background_bricks.png')"; 
+
     player.Draw();
     // currentPlayers.forEach(player => {
     //     player.Draw();
@@ -39,14 +41,13 @@ function moveObjects() {
         player.Move();
     })
     bulletArray.forEach(bullet => {
-        bullet.Move();
+        bullet.Move(    );
     })
 }
 function deleteObjects() {
-   bulletArray = bulletArray.filter(bullet => bullet.shouldKeepShowingBullet);
+    bulletArray.filter(bullet => !bullet.shouldKeepShowingBullet);
 }
 function gameLoop() {
-<<<<<<< HEAD
     const gamepads = navigator.getGamepads();
     //console.log(gamepads);
     if(gamepads[0]) {
@@ -113,12 +114,9 @@ function gameLoop() {
         }
         gamepadDisplay.textContent = JSON.stringify(gamepadState, null, 2)
     }
-=======
->>>>>>> 952b7c2d8003461506beffebed4fae4a2e4e715f
+
     drawObjects();
     moveObjects();
-    bulletDetection();
-    deleteObjects();
     playerGravity();
     isDead();
     window.requestAnimationFrame(gameLoop);
