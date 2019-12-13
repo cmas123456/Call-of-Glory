@@ -16,13 +16,9 @@ const gamepadDisplay = document.getElementById('gamepad-display');
 document.body.appendChild(source) // adds the canvas to the webpage
 const context = source.getContext('2d', {alpha: 'false'})
 
-// function drawBackground() {
-// }
-
 function drawObjects() {
     context.clearRect(0, 0, 800, 600);
-    context.drawImage(background, 0,0,800,600);
-    // document.body.style.backgroundImage = "url('assets/background_bricks.png')"; 
+    context.drawImage(background, 0,0,800,600); 
     currentPlayers.forEach(player => {
         player.Draw();
     })

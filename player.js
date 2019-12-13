@@ -13,6 +13,15 @@ let playerWalk6 = document.getElementById('walk6');
 let playerWalk7 = document.getElementById('walk7');
 let playerWalk8 = document.getElementById('walk8');
 let playerWalk9 = document.getElementById('walk9');
+let redWalk1 = document.getElementById('redwalk1')
+let redWalk2 = document.getElementById('redwalk2')
+let redWalk3 = document.getElementById('redwalk3')
+let redWalk4 = document.getElementById('redwalk4')
+let redWalk5 = document.getElementById('redwalk5')
+let redWalk6 = document.getElementById('redwalk6')
+let redWalk7 = document.getElementById('redwalk7')
+let redWalk8 = document.getElementById('redwalk8')
+let redWalk9 = document.getElementById('redwalk9')
 let bulletImg = document.getElementById('projectile');
 
 function playerCreate(x,y,playerID = 1) {
@@ -205,32 +214,68 @@ function playerCreate(x,y,playerID = 1) {
         Walk() {     
             this.animCounter += 3;
             if (this.animCounter === 3){
-            this.image = playerWalk2;
+                if (this.playerID === 2){
+                    this.image = redWalk2
+                } else {
+                    this.image = playerWalk2;
+                } 
             }
             if (this.animCounter === 6){
-            this.image = playerWalk3;
+                if (this.playerID === 2){
+                    this.image = redWalk3
+                } else {
+                    this.image = playerWalk3;
+                }
             }
             if (this.animCounter === 9){
-            this.image = playerWalk4;
+                if (this.playerID === 2){
+                    this.image = redWalk4
+                } else {
+                    this.image = playerWalk4;
+                }
             }
             if (this.animCounter === 12){
-            this.image = playerWalk5;
+                if (this.playerID === 2){
+                    this.image = redWalk5
+                } else {
+                    this.image = playerWalk5;
+                }
             }
             if (this.animCounter === 15){
-            this.image = playerWalk6;
+                if (this.playerID === 2){
+                    this.image = redWalk6
+                } else {
+                    this.image = playerWalk6;
+                }
             }
             if (this.animCounter === 18){
-            this.image = playerWalk7;
+                if (this.playerID === 2){
+                    this.image = redWalk7
+                } else {
+                    this.image = playerWalk7;
+                }
             }
             if (this.animCounter === 21){
-            this.image = playerWalk8;
+                if (this.playerID === 2){
+                    this.image = redWalk8
+                } else {
+                    this.image = playerWalk8;
+                }
             }
             if (this.animCounter === 24){
-            this.image = playerWalk9;
+                if (this.playerID === 2){
+                    this.image = redWalk9
+                } else {
+                    this.image = playerWalk9;
+                }
             }
             if (this.animCounter === 27){
-            this.animCounter = 0;
-            this.image = playerWalk1;
+                if (this.playerID === 2){
+                    this.image = redWalk1
+                } else {
+                    this.image = playerWalk1;    
+                }
+                this.animCounter = 0;
             }
         },
         Acceleration() {
@@ -246,53 +291,13 @@ function playerCreate(x,y,playerID = 1) {
             }
         }
     }
+
+    if (player.playerID === 2){
+        player.image = redWalk1;
+    }
     currentPlayers.push(player);
 }
-// function Jump() {
-//     player.jumpCounter = 0;
-//     player.velocity[1] = 0;
-//         while (player.jumpCounter <= 1.2) {
-//             player.jumpCounter += .3;
-//             player.velocity[1] -= player.jumpCounter;
-            
-//             if (player.jumpCounter > 1.2) {
-//                 player.jumpCounter = 0;
-//                 break;
-//             } 
-//         }
-//         player.isOnPlatform = false;
-// }
-// function playerWalk() {     
-//     player.animCounter += 3;
-//     if (player.animCounter === 3){
-//     player.image = playerWalk2;
-//     }
-//     if (player.animCounter === 6){
-//     player.image = playerWalk3;
-//     }
-//     if (player.animCounter === 9){
-//     player.image = playerWalk4;
-//     }
-//     if (player.animCounter === 12){
-//     player.image = playerWalk5;
-//     }
-//     if (player.animCounter === 15){
-//     player.image = playerWalk6;
-//     }
-//     if (player.animCounter === 18){
-//     player.image = playerWalk7;
-//     }
-//     if (player.animCounter === 21){
-//     player.image = playerWalk8;
-//     }
-//     if (player.animCounter === 24){
-//     player.image = playerWalk9;
-//     }
-//     if (player.animCounter === 27){
-//     player.animCounter = 0;
-//     player.image = playerWalk1;
-//     }
-// }
+
 function playerGravity() {
     currentPlayers.forEach(player => {
         if (!player.isOnPlatform){
@@ -306,18 +311,6 @@ function playerGravity() {
         }
     })
 }
-// function playerAcceleration() {
-//     counter++;
-//     if (counter === 5){
-//         player.horAccel += .15;
-//     }
-//     if (counter === 10){
-//         player.horAccel += .15;
-//     }
-//     if (counter === 20){
-//         player.horAccel += .2;
-//     }
-// }
 
 function bulletDetection() {
     bulletArray.forEach(bullet => {
