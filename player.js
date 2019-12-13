@@ -1,4 +1,4 @@
-// let currentPlayers = [];
+let currentPlayers = [];
 let player = {};
 let counter = 0;
 let gravity = .1;
@@ -15,8 +15,9 @@ let playerWalk8 = document.getElementById('walk8');
 let playerWalk9 = document.getElementById('walk9');
 let bulletImg = document.getElementById('projectile');
 
-function playerCreate(x,y) {
+function playerCreate(x,y,playerID = 1) {
     player = {
+        playerID: playerID,
         origin:[x,y],
         dimensions:[24,32],
         image: playerWalk1,
@@ -30,17 +31,18 @@ function playerCreate(x,y) {
         vertAccel: 0,
         animCounter: 0,
         jumpCounter: 0,
+        counter: 0,
         direction: 'right',
         bulletCreate() {
             let bullet = {
-                origin: [player.origin[0] + player.dimensions[0], player.origin[1] + (player.dimensions[1] / 2)],
+                origin: [this.origin[0] + this.dimensions[0], this.origin[1] + (this.dimensions[1] / 2)],
                 dimensions: [10, 2],
                 image : bulletImg,
                 shouldKeepShowingBullet: true,
                 horizontalSpeed: 5,
                 travelDistance: 0,
                 gravity: 1,
-                direction: player.direction,
+                direction: this.direction,
                 Draw () {
                         context.drawImage(bullet.image, bullet.origin[0], bullet.origin[1], bullet.dimensions[0],  bullet.dimensions[1]);
                     }, 
@@ -79,180 +81,245 @@ function playerCreate(x,y) {
                 }
             }
             if (bullet.direction === 'left'){
-                bullet.origin[0] = player.origin[0];
+                bullet.origin[0] = this.origin[0];
             }
             bulletArray.push(bullet);
         },
         isOnPlatform: false,
         canJump: false,
         Draw() {
-            if (player.velocity[0] === 0){
-                if (player.direction === 'right'){
+            if (this.velocity[0] === 0){
+                if (this.direction === 'right'){
                     context.scale(1, 1);
-                    context.drawImage(player.image, player.origin[0], player.origin[1], player.dimensions[0], player.dimensions[1]);
+                    context.drawImage(this.image, this.origin[0], this.origin[1], this.dimensions[0], this.dimensions[1]);
                     context.setTransform(1, 0, 0, 1, 0, 0);
                 }
-                else if (player.direction === 'left'){
+                else if (this.direction === 'left'){
                     context.scale(-1, 1);
-                    context.drawImage(player.image, -player.origin[0] - player.dimensions[0], player.origin[1], player.dimensions[0], player.dimensions[1]);
+                    context.drawImage(this.image, -this.origin[0] - this.dimensions[0], this.origin[1], this.dimensions[0], this.dimensions[1]);
                     context.setTransform(1, 0, 0, 1, 0, 0);
                 }
             }
-            if (player.velocity[0] > 0) {
+            if (this.velocity[0] > 0) {
                 context.scale(1, 1);
-                context.drawImage(player.image, player.origin[0], player.origin[1], player.dimensions[0], player.dimensions[1]);
+                context.drawImage(this.image, this.origin[0], this.origin[1], this.dimensions[0], this.dimensions[1]);
                 context.setTransform(1, 0, 0, 1, 0, 0);
             }
-            if (player.velocity[0] < 0) {
+            if (this.velocity[0] < 0) {
                 context.scale(-1,1);
-                context.drawImage(player.image, -player.origin[0] - player.dimensions[0], player.origin[1], player.dimensions[0], player.dimensions[1]);
+                context.drawImage(this.image, -this.origin[0] - this.dimensions[0], this.origin[1], this.dimensions[0], this.dimensions[1]);
                 context.setTransform(1, 0, 0, 1, 0, 0);
             }
         },
         Move() {
-            let nextX = player.origin[0] + player.velocity[0];
-            let nextY = player.origin[1] + player.velocity[1];
+            let nextX = this.origin[0] + this.velocity[0];
+            let nextY = this.origin[1] + this.velocity[1];
             let isPlayerOnPlatform = false;
             
-            if (player.velocity[1] === 0) {
-                nextY = player.origin[1];
+            if (this.velocity[1] === 0) {
+                nextY = this.origin[1];
             }
-            if (player.velocity[0] === 0) {
-                nextX = player.origin[0];
+            if (this.velocity[0] === 0) {
+                nextX = this.origin[0];
             }
             levelWalls.forEach(wall => {
                 let leftSide = wall.origin[0];
                 let rightSide = wall.origin[0] + wall.dimensions[0];
                 let bottomSide = wall.origin[1] + wall.dimensions[1];
                 let topSide = wall.origin[1];
-                wall.isOnPlatform = false;
+                if (this.playerID === 1){
+                    wall.P1OnPlatform = false;
+                } else if (this.playerID === 2) {
+                    wall.P2OnPlatform = false;
+                }
                 
-                
-                if ((player.origin[0] > leftSide && player.origin[0] < rightSide) || 
-                    (player.origin[0] + player.dimensions[0]) < rightSide && (player.origin[0] + player.dimensions[0] > leftSide)||
-                    (player.origin[0] + (player.dimensions[0] / 2 ) < rightSide && (player.origin[0] + (player.dimensions[0] / 2) > leftSide))){
+
+                if ((this.origin[0] > leftSide && this.origin[0] < rightSide) || 
+                    (this.origin[0] + this.dimensions[0]) < rightSide && (this.origin[0] + this.dimensions[0] > leftSide)||
+                    (this.origin[0] + (this.dimensions[0] / 2 ) < rightSide && (this.origin[0] + (this.dimensions[0] / 2) > leftSide))){
                         //collision top of platform
-                        if (player.velocity[1] > 0) {
-                            if (nextY + player.dimensions[1] > topSide && nextY + player.dimensions[1] < bottomSide) {
-                                nextY = topSide - player.dimensions[1] - 1;
+                        if (this.velocity[1] > 0) {
+                            if (nextY + this.dimensions[1] > topSide && nextY + this.dimensions[1] < bottomSide) {
+                                nextY = topSide - this.dimensions[1] - 1;
+                                if (this.playerID === 1){
+                                    wall.P1OnPlatform = true;
+                                } else if (this.playerID === 2){
+                                    wall.P2OnPlatform = true;
+                                }
                                 isPlayerOnPlatform = true;
-                                wall.isOnPlatform = true;
                             }
                         }
                         //collision bot of platform
-                        else if (player.velocity[1] < 0) {
+                        else if (this.velocity[1] < 0) {
                             if (nextY > topSide && nextY < bottomSide){
                                 nextY = bottomSide + 1;
-                                player.velocity[1] = 0;
+                                this.velocity[1] = 0;
                             }
                         }
                     }
-                if ((player.origin[1] >= topSide && player.origin[1] <= bottomSide) || 
-                    (player.origin[1] + player.dimensions[1] - 2 >= topSide && player.origin[1] + player.dimensions[1] <= bottomSide)||
-                    (player.origin[1] + (player.dimensions[1] / 2) >= topSide) && player.origin[1] + (player.dimensions[1] / 2) <= bottomSide){
+                if ((this.origin[1] >= topSide && this.origin[1] <= bottomSide) || 
+                    (this.origin[1] + this.dimensions[1] - 2 >= topSide && this.origin[1] + this.dimensions[1] <= bottomSide)||
+                    (this.origin[1] + (this.dimensions[1] / 2) >= topSide) && this.origin[1] + (this.dimensions[1] / 2) <= bottomSide){
                         //collision left of platform
-                        if (player.velocity[0] > 0) {
-
-
-                            if (nextX + player.dimensions[0] > leftSide && nextX + player.dimensions[0] < rightSide) {
-                                nextX = leftSide - player.dimensions[0];
+                        if (this.velocity[0] > 0) {
+                            if (nextX + this.dimensions[0] > leftSide && nextX + this.dimensions[0] < rightSide) {
+                                nextX = leftSide - this.dimensions[0];
                                 if (wall.canPush){
-                                    wall.origin[0] += player.velocity[0];
+                                    wall.origin[0] += this.velocity[0];
                                 }
-                                player.velocity[0] = 0;
+                                this.velocity[0] = 0;
                             }
                         }
                         //collision right of platform
-                        else if (player.velocity[0] < 0) {
+                        else if (this.velocity[0] < 0) {
                             if (nextX > leftSide && nextX < rightSide){
                                 nextX = rightSide + 1;
 
                                 if (wall.canPush){
-                                    wall.origin[0] += player.velocity[0];
+                                    wall.origin[0] += this.velocity[0];
                                 }
-                                player.velocity[0] = 0;
+                                this.velocity[0] = 0;
                             }
                         }
                     }
                 
             })
-            player.isOnPlatform = isPlayerOnPlatform;
-            player.origin[0] = nextX;
-            player.origin[1] = nextY;
+            this.isOnPlatform = isPlayerOnPlatform;
+            this.origin[0] = nextX;
+            this.origin[1] = nextY;
+        },
+        Jump() {
+            this.jumpCounter = 0;
+            this.velocity[1] = 0;
+                while (this.jumpCounter <= 1.2) {
+                    this.jumpCounter += .3;
+                    this.velocity[1] -= this.jumpCounter;
+                    
+                    if (this.jumpCounter > 1.2) {
+                        this.jumpCounter = 0;
+                        break;
+                    } 
+                }
+                player.isOnPlatform = false;
+        },
+        Walk() {     
+            this.animCounter += 3;
+            if (this.animCounter === 3){
+            this.image = playerWalk2;
+            }
+            if (this.animCounter === 6){
+            this.image = playerWalk3;
+            }
+            if (this.animCounter === 9){
+            this.image = playerWalk4;
+            }
+            if (this.animCounter === 12){
+            this.image = playerWalk5;
+            }
+            if (this.animCounter === 15){
+            this.image = playerWalk6;
+            }
+            if (this.animCounter === 18){
+            this.image = playerWalk7;
+            }
+            if (this.animCounter === 21){
+            this.image = playerWalk8;
+            }
+            if (this.animCounter === 24){
+            this.image = playerWalk9;
+            }
+            if (this.animCounter === 27){
+            this.animCounter = 0;
+            this.image = playerWalk1;
+            }
+        },
+        Acceleration() {
+            counter++;
+            if (counter === 5){
+                this.horAccel += .15;
+            }
+            if (counter === 10){
+                this.horAccel += .15;
+            }
+            if (counter === 20){
+                this.horAccel += .2;
+            }
         }
     }
+    currentPlayers.push(player);
 }
-function Jump() {
-    player.jumpCounter = 0;
-    player.velocity[1] = 0;
-        while (player.jumpCounter <= 1.2) {
-            player.jumpCounter += .3;
-            player.velocity[1] -= player.jumpCounter;
+// function Jump() {
+//     player.jumpCounter = 0;
+//     player.velocity[1] = 0;
+//         while (player.jumpCounter <= 1.2) {
+//             player.jumpCounter += .3;
+//             player.velocity[1] -= player.jumpCounter;
             
-            if (player.jumpCounter > 1.2) {
-                player.jumpCounter = 0;
-                break;
-            } 
-        }
-        player.isOnPlatform = false;
-}
-function playerWalk() {
-    player.animCounter += 3;
-    if (player.animCounter === 3){
-    player.image = playerWalk2;
-    }
-    if (player.animCounter === 6){
-    player.image = playerWalk3;
-    }
-    if (player.animCounter === 9){
-    player.image = playerWalk4;
-    }
-    if (player.animCounter === 12){
-    player.image = playerWalk5;
-    }
-    if (player.animCounter === 15){
-    player.image = playerWalk6;
-    }
-    if (player.animCounter === 18){
-    player.image = playerWalk7;
-    }
-    if (player.animCounter === 21){
-    player.image = playerWalk8;
-    }
-    if (player.animCounter === 24){
-    player.image = playerWalk9;
-    }
-    if (player.animCounter === 27){
-    player.animCounter = 0;
-    player.image = playerWalk1;
-    }
-}
+//             if (player.jumpCounter > 1.2) {
+//                 player.jumpCounter = 0;
+//                 break;
+//             } 
+//         }
+//         player.isOnPlatform = false;
+// }
+// function playerWalk() {     
+//     player.animCounter += 3;
+//     if (player.animCounter === 3){
+//     player.image = playerWalk2;
+//     }
+//     if (player.animCounter === 6){
+//     player.image = playerWalk3;
+//     }
+//     if (player.animCounter === 9){
+//     player.image = playerWalk4;
+//     }
+//     if (player.animCounter === 12){
+//     player.image = playerWalk5;
+//     }
+//     if (player.animCounter === 15){
+//     player.image = playerWalk6;
+//     }
+//     if (player.animCounter === 18){
+//     player.image = playerWalk7;
+//     }
+//     if (player.animCounter === 21){
+//     player.image = playerWalk8;
+//     }
+//     if (player.animCounter === 24){
+//     player.image = playerWalk9;
+//     }
+//     if (player.animCounter === 27){
+//     player.animCounter = 0;
+//     player.image = playerWalk1;
+//     }
+// }
 function playerGravity() {
-    if (!player.isOnPlatform){
-        player.velocity[1] += gravity;
-    }
-    if (player.attachedHorizontalSpeed > 0){
-        player.velocity[0] += player.attachedHorizontalSpeed;
-    }
-    if (player.attachedVerticalSpeed > 0) {
-        player.velocity[1] += player.attachedVerticalSpeed;
-    }
+    currentPlayers.forEach(player => {
+        if (!player.isOnPlatform){
+            player.velocity[1] += gravity;
+        }
+        if (player.attachedHorizontalSpeed > 0){
+            player.velocity[0] += player.attachedHorizontalSpeed;
+        }
+        if (player.attachedVerticalSpeed > 0) {
+            player.velocity[1] += player.attachedVerticalSpeed;
+        }
+    })
 }
-function playerAcceleration() {
-    counter++;
-    if (counter === 5){
-        player.horAccel += .15;
-    }
-    if (counter === 10){
-        player.horAccel += .15;
-    }
-    if (counter === 20){
-        player.horAccel += .2;
-    }
-}
+// function playerAcceleration() {
+//     counter++;
+//     if (counter === 5){
+//         player.horAccel += .15;
+//     }
+//     if (counter === 10){
+//         player.horAccel += .15;
+//     }
+//     if (counter === 20){
+//         player.horAccel += .2;
+//     }
+// }
 
 function bulletDetection() {
-    console.log('this is being called');
     bulletArray.forEach(bullet => {
         let leftSide = bullet.origin[0];
         let rightSide = bullet.origin[0] + bullet.dimensions[0];
@@ -263,10 +330,8 @@ function bulletDetection() {
             let right = wall.origin[0] + wall.dimensions[0];
             let top = wall.origin[1];
             let bot = wall.origin[1] + wall.dimensions[1];
-            if ((leftSide >= left && leftSide <= right) || (rightSide >= left && rightSide <= right)) {
-                console.log('outer success');
+            if ((leftSide >= left && leftSide <= right) || (rightSide >= left && rightSide <= left)) {
                 if ((topSide >= top && topSide <= bot) || botSide >= top && botSide <= bot) {
-                    console.log('success');
                     bullet.shouldKeepShowingBullet = false;
                 }
             } 
@@ -274,36 +339,43 @@ function bulletDetection() {
     })
 }
 function isDead() {
-    if (player.origin[0] < -50 || player.origin[0] > 850 || player.origin[1] > 700) {
-        player.lives--;
-        player.origin[0] = 50;
-        player.origin[1] = 200;
-    }
+    currentPlayers.forEach(player => {
+        if (player.origin[0] < -50 || player.origin[0] > 850 || player.origin[1] > 700) {
+            player.lives--;
+            player.origin[0] = 50;
+            player.origin[1] = 200;
+        }
+    });
 }
-playerCreate(50,200);
+playerCreate(50,200,1);   
+playerCreate(100,200,2);
 
 let InputHandler = (() => {
     document.addEventListener("keydown", event => {
       switch (event.key) {
-        //   case "ArrowLeft":
-        //       playerAcceleration();
-        //       playerWalk();
-        //       player.direction = 'left';
-        //       player.velocity[0] = -player.horizontalSpeed - player.horAccel;
-        //       break;
-        //   case "ArrowRight":
-        //       playerAcceleration();
-        //       playerWalk();
-        //       player.direction = 'right';
-        //       player.velocity[0] = player.horizontalSpeed + player.horAccel;
-        //       break;
+          case "ArrowLeft":
+              currentPlayers[0].Acceleration();
+              currentPlayers[0].Walk();
+              currentPlayers[0].direction = 'left';
+              currentPlayers[0].velocity[0] = -currentPlayers[0].horizontalSpeed - currentPlayers[0].horAccel;
+              break;
+          case "ArrowRight":
+              currentPlayers[0].Acceleration();
+              currentPlayers[0].Walk();
+              currentPlayers[0].direction = 'right';
+              currentPlayers[0].velocity[0] = currentPlayers[0].horizontalSpeed + currentPlayers[0].horAccel;
+              break;
           case "ArrowUp":
               break;
           case "ArrowDown":
               break;
           case "z": 
+              currentPlayers[0].bulletCreate();
               break;
           case ' ':
+              if (currentPlayers[0].isOnPlatform){
+                  currentPlayers[0].Jump();
+              }
               break;
           default:
             }
@@ -311,18 +383,18 @@ let InputHandler = (() => {
    
     document.addEventListener("keyup", event => {
       switch (event.key) {
-        //   case "ArrowLeft":
-        //       counter = 0;
-        //       player.horAccel = 0;
-        //       player.velocity[0] = 0;
-        //       player.animCounter = 0;
-        //       break;
-        //   case "ArrowRight":
-        //       player.horAccel = 0;
-        //       counter = 0;
-        //       player.velocity[0] = 0;
-        //       player.animCounter = 0;
-        //       break;
+          case "ArrowLeft":
+              currentPlayers[0].counter = 0;
+              currentPlayers[0].horAccel = 0;
+              currentPlayers[0].velocity[0] = 0;
+              currentPlayers[0].animCounter = 0;
+              break;
+          case "ArrowRight":
+              currentPlayers[0].horAccel = 0;
+              counter = 0;
+              currentPlayers[0].velocity[0] = 0;
+              currentPlayers[0].animCounter = 0;
+              break;
           case "ArrowUp":
               break;
           case ' ':

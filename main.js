@@ -23,14 +23,11 @@ function drawObjects() {
     context.clearRect(0, 0, 800, 600);
     context.drawImage(background, 0,0,800,600);
     // document.body.style.backgroundImage = "url('assets/background_bricks.png')"; 
-
-    player.Draw();
-    // currentPlayers.forEach(player => {
-    //     player.Draw();
-    // })
+    currentPlayers.forEach(player => {
+        player.Draw();
+    })
     levelWalls.forEach(wall => {
         wall.Draw();
-        //wall.Move()
         
     })
     bulletArray.forEach(bullet => {
@@ -39,10 +36,9 @@ function drawObjects() {
 }
 
 function moveObjects() {
-    player.Move();
-    // currentPlayers.forEach(player => {
-    //     player.Move();
-    // })
+    currentPlayers.forEach(player => {
+        player.Move();
+    })
     bulletArray.forEach(bullet => {
         bullet.Move(    );
     })
@@ -81,6 +77,7 @@ function gameLoop() {
                 {buttons_15: gamepads[0].buttons[15].pressed}
             ],
         }
+        //Right on DPAD
         if(gamepads[0].buttons[15].pressed){
             playerAcceleration();
             playerWalk();
@@ -89,45 +86,46 @@ function gameLoop() {
             player.velocity[0] = player.horizontalSpeed + player.horAccel;
         }
         else if (gamepads[0].buttons[15].pressed === false && controllerRight === true){
-            counter = 0;
+              counter = 0;
               player.horAccel = 0;
               player.velocity[0] = 0;
               player.animCounter = 0;
               controllerRight = false;
         }
+        //Left on DPAD
         if (gamepads[0].buttons[14].pressed){
             playerAcceleration();
             playerWalk();
             player.direction = 'left';
             controllerLeft = true;
-            console.log(player.direction);
             player.velocity[0] = -player.horizontalSpeed - player.horAccel;
         }
         else if (gamepads[0].buttons[14].pressed === false && controllerLeft === true){
-          console.log('it happened');
           counter = 0;
           player.horAccel = 0;
           player.velocity[0] = 0;
-          console.log(player.animCounter);
           player.animCounter = 0;
           controllerLeft = false;
         }
-        // else if (gamepads[0].buttons[14].pressed === false)
-        // {
-        //     counter = 0;
-        //       player.horAccel = 0;
-        //       player.velocity[0] = 0;
-        //       player.animCounter = 0;
-        // }
+        else if (gamepads[0].buttons[14].pressed === false)
+        {
+              counter = 0;
+              player.horAccel = 0;
+              player.velocity[0] = 0;
+              player.animCounter = 0;
+        }
+        //down on DPAD
         if (gamepads[0].buttons[13].pressed)
         {
             player.velocity[0] = 0;
         }
+        //A button on Xbox Controller
         if (gamepads[0].buttons[0].pressed)
         {
             if (player.isOnPlatform)
               Jump();
         }
+        //X Button on Xbox Controller
         if (gamepads[0].buttons[2].pressed)
         {
             player.bulletCreate();

@@ -9,8 +9,9 @@ function createWalls(x, y, width, height, imageID = null, canThrow = false, shou
         dimensions: [width, height],
         image: imageID,
         isOnPlatform: false,
+        P1OnPlatform: false,
+        P2OnPlatform: false,
         isOn: true,
-
         onTopWall: null,
         canMove : shouldMove,
         gravity :1.5,
@@ -19,8 +20,7 @@ function createWalls(x, y, width, height, imageID = null, canThrow = false, shou
         Draw(){
 
            
-            if (this.isOnPlatform && this.canMove  ){
-
+            if ((this.P1OnPlatform || this.P2OnPlatform) && this.canMove){
                 if (goUp){
                 this.origin[1]--;
                 }
@@ -36,7 +36,6 @@ function createWalls(x, y, width, height, imageID = null, canThrow = false, shou
                 }
             }
             else{
-
                 if (upper > this.origin[1] ){
                     this.origin[1]++;
                 }
