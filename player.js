@@ -264,13 +264,6 @@ function playerCreate(x,y,playerID = 1) {
             }
             if (this.animCounter === 24){
                 if (this.playerID === 2){
-                    this.image = redWalk9
-                } else {
-                    this.image = playerWalk9;
-                }
-            }
-            if (this.animCounter === 27){
-                if (this.playerID === 2){
                     this.image = redWalk1
                 } else {
                     this.image = playerWalk1;    
