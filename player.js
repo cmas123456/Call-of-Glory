@@ -45,6 +45,7 @@ function playerCreate(x,y,playerID = 1) {
         bulletCreate() {
             let bullet = {
                 origin: [this.origin[0] + this.dimensions[0], this.origin[1] + (this.dimensions[1] / 2)],
+                bulletID: this.playerID,
                 dimensions: [10, 2],
                 image : bulletImg,
                 shouldKeepShowingBullet: true,
@@ -310,7 +311,7 @@ function bulletDetection() {
         let leftSide = bullet.origin[0];
         let rightSide = bullet.origin[0] + bullet.dimensions[0];
         let topSide = bullet.origin[1];
-        let botSide = bullet.origin[1] + bullet.dimensions[0]
+        let botSide = bullet.origin[1] + bullet.dimensions[0];
         levelWalls.forEach(wall => {
             let left = wall.origin[0];
             let right = wall.origin[0] + wall.dimensions[0];
@@ -321,6 +322,28 @@ function bulletDetection() {
                     bullet.shouldKeepShowingBullet = false;
                 }
             } 
+        })
+    })
+    bulletArray.forEach(bullet => {
+        let leftSide = bullet.origin[0];
+        let rightSide = bullet.origin[0] + bullet.dimensions[0];
+        let topSide = bullet.origin[1];
+        let botSide = bullet.origin[1] + bullet.dimensions[0];
+        currentPlayers.forEach(player => {
+            let left = player.origin[0];
+            let right = player.origin[0] + player.dimensions[0];
+            let top = player.origin[1];
+            let bot = player.origin[1] + player.dimensions[1];
+            if ((leftSide >= left && leftSide <= right) || (rightSide >= left && rightSide <= left)) {
+                if ((topSide >= top && topSide <= bot) || botSide >= top && botSide <= bot) {
+                    if (player.playerID === bullet.bulletID) {
+                        bullet.shouldKeepShowingBullet
+                    } else {
+                        bullet.shouldKeepShowingBullet = false;
+                    }
+                }
+            } 
+
         })
     })
 }

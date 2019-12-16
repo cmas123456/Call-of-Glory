@@ -33,6 +33,7 @@ function drawObjects() {
         
     })
     bulletArray.forEach(bullet => {
+        console.log(bullet.shouldKeepShowingBullet);
         bullet.Draw();
     })
 }
@@ -42,7 +43,7 @@ function moveObjects() {
         player.Move();
     })
     bulletArray.forEach(bullet => {
-        bullet.Move(    );
+        bullet.Move();
     })
 }
 function deleteObjects() {
