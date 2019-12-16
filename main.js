@@ -13,6 +13,12 @@ let controllerLeft = false;
 
 let controllerRight2 = false;
 let controllerLeft2 = false;
+let currentWall = {
+
+    origin : [0,0],
+    dimensions : [0,0]
+
+}
 
 const gamepadDisplay = document.getElementById('gamepad-display');
 const gamepadDisplay2 = document.getElementById('gamepad-display2');
@@ -29,7 +35,15 @@ function drawObjects() {
         player.Draw();
     })
     levelWalls.forEach(wall => {
-        wall.Draw();
+        wall.Draw(); 
+        if (wall.origin[0] == currentPlayers[1].origin[0]  && wall.origin[1] >= currentPlayers[1].origin[1]  && wall.origin[1] <= currentPlayers[1].origin[1]+ 50 ){
+            currentWall.origin[0] = wall.origin[0]
+            currentWall.origin[1] = wall.origin[1]
+            currentWall.dimensions[0] = wall.dimensions[0]
+            currentWall.dimensions[1] = wall.dimensions[1]
+            console.log(currentWall.origin[0] + " " + currentWall.origin[1] + " " + currentPlayers[1].origin[1 ] + " " +  currentPlayers[1].dimensions[1])
+
+        }
         
     })
     bulletArray.forEach(bullet => {
@@ -48,9 +62,25 @@ function moveObjects() {
 function deleteObjects() {
     bulletArray = bulletArray.filter(bullet => bullet.shouldKeepShowingBullet);
 }
+
+function movePlayer (){
+
+
+
+
+
+    if (currentWall.origin[0]+ currentWall.dimensions[0] >= currentPlayers[1].origin[0] + currentPlayers[1].dimensions[0]){
+
+    }
+    else{
+        currentPlayers[1].origin[0]++;
+
+    }
+
+}
 function gameLoop() {
     const gamepads = navigator.getGamepads();
- 
+   // movePlayer();
     if(gamepads[0]) {
         const gamepadState ={
             id: gamepads[0].id,
