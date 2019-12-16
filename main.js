@@ -33,7 +33,6 @@ function drawObjects() {
         
     })
     bulletArray.forEach(bullet => {
-        console.log(bullet.shouldKeepShowingBullet);
         bullet.Draw();
     })
 }
@@ -125,7 +124,10 @@ function gameLoop() {
         //X Button on Xbox Controller
         if (gamepads[0].buttons[2].pressed)
         {
-            currentPlayers[0].bulletCreate();
+            if (currentPlayers[0].bulletROF >= 60) {
+                currentPlayers[0].bulletCreate();
+                currentPlayers[0].bulletROF === 0;
+            }
         }
         gamepadDisplay.textContent = JSON.stringify(gamepadState, null, 2);
     }
@@ -204,7 +206,11 @@ function gameLoop() {
         //X Button on Xbox Controller
         if (gamepads[1].buttons[2].pressed)
         {
-            currentPlayers[1].bulletCreate();
+            if (currentPlayers[1].bulletROF >= 60) {
+                console.log(currentPlayers[1].bulletROF);
+                currentPlayers[1].bulletCreate();
+                currentPlayers[1].bulletROF === 0;
+            }
         }
         gamepadDisplay2.textContent = JSON.stringify(gamepadState1, null, 2);
     }
