@@ -354,10 +354,10 @@ function bulletDetection() {
                     } else {
                         if (bullet.direction === 'right'){
                             player.velocity[0] += bullet.horizontalSpeed * 2;
-                            player.velocity[1] += bullet.verticalSpeed * 2;
+                            player.velocity[1] += bullet.verticalSpeed * 4;
                         } else if (bullet.direction === 'left') {
                             player.velocity[0] -= bullet.horizontalSpeed * 2;
-                            player.velocity[1] += bullet.verticalSpeed * 2;
+                            player.velocity[1] += bullet.verticalSpeed * 4;
                         }
                         bullet.shouldKeepShowingBullet = false;
                     }
