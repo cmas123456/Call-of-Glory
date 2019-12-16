@@ -329,6 +329,8 @@ function isDead() {
         if (currentPlayers[0].origin[0] < -50 ||currentPlayers[0].origin[0] > 850 ||currentPlayers[0].origin[1] > 700) {
             console.log(currentPlayers[1].score)
             currentPlayers[0].lives--;
+            currentPlayers[0].velocity[0] = 0;
+            currentPlayers[0].velocity[1] = 0;
             currentPlayers[0].origin[0] = 50;
             currentPlayers[0].origin[1] = 200;
             currentPlayers[1].score += 1;
@@ -336,6 +338,8 @@ function isDead() {
         if(currentPlayers[1].origin[0] < -50 ||currentPlayers[1].origin[0] > 850 ||currentPlayers[1].origin[1] > 700) {
             console.log(currentPlayers[0].score)
             currentPlayers[1].lives--;
+            currentPlayers[1].velocity[0] = 0;
+            currentPlayers[1].velocity[1] = 0;
             currentPlayers[1].origin[0] = 650;
             currentPlayers[1].origin[1] = 200;
             currentPlayers[0].score += 1; 
