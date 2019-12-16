@@ -3,6 +3,14 @@ const source = document.createElement('canvas') //creates the canvas
 function assignAttributes(element, attributes) {
 	Object.keys(attributes).forEach(key => element.setAttribute(key, attributes[key]))
 }
+
+let score1 = document.getElementById("scores1");
+let score2 = document.getElementById("scores2");
+
+score1.textContent = (`Player1 Score: ${currentPlayers[0].score}`);
+score2.textContent = (`Player2 Score: ${currentPlayers[1].score}`);
+
+
 assignAttributes(source, { // this makes the canvas fit in the window
   id: 'source',
 	height: 600,
@@ -14,8 +22,8 @@ let controllerLeft = false;
 let controllerRight2 = false;
 let controllerLeft2 = false;
 
-const gamepadDisplay = document.getElementById('gamepad-display');
-const gamepadDisplay2 = document.getElementById('gamepad-display2');
+// const gamepadDisplay = document.getElementById('gamepad-display');
+// const gamepadDisplay2 = document.getElementById('gamepad-display2');
 
 
 
@@ -50,6 +58,8 @@ function deleteObjects() {
 }
 function gameLoop() {
     const gamepads = navigator.getGamepads();
+
+    
  
     if(gamepads[0]) {
         const gamepadState ={
@@ -129,7 +139,7 @@ function gameLoop() {
                 currentPlayers[0].bulletROF === 0;
             }
         }
-        gamepadDisplay.textContent = JSON.stringify(gamepadState, null, 2);
+        //gamepadDisplay.textContent = JSON.stringify(gamepadState, null, 2);
     }
 
 
@@ -212,7 +222,7 @@ function gameLoop() {
                 currentPlayers[1].bulletROF === 0;
             }
         }
-        gamepadDisplay2.textContent = JSON.stringify(gamepadState1, null, 2);
+        //gamepadDisplay2.textContent = JSON.stringify(gamepadState1, null, 2);
     }
 
 
@@ -224,6 +234,12 @@ function gameLoop() {
     gravitys();
     isOnTop();
     isDead();
+
+    context.font = "20px Amatic";
+    context.fillStyle = 'red'
+    context.fillText(score1.textContent, (source.width/4) - 75, 50);
+    context.fillText(score2.textContent, (source.width/3) * 2, 50);
+
     window.requestAnimationFrame(gameLoop);
 }
 
