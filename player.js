@@ -34,6 +34,7 @@ function playerCreate(x,y,playerID = 1) {
         velocity: [0, 0],
         horizontalSpeed: 1,
         verticalSpeed: 1,
+        knockbackCounter: 10,
         lives: 5,
         attachedHorizontalSpeed: 0,
         attachedVerticalSpeed: 0,
@@ -134,6 +135,9 @@ function playerCreate(x,y,playerID = 1) {
         Move() {
             if (this.bulletROF < 60){
                 this.bulletROF += 2;
+            }
+            if (this.knockbackCounter < 10) {
+                this.knockbackCounter++;
             }
             let nextX = this.origin[0] + this.velocity[0];
             let nextY = this.origin[1] + this.velocity[1];
@@ -319,6 +323,23 @@ function playerGravity() {
     })
 }
 
+// function crateSplat () {
+//     currentPlayers.forEach(player => {
+//         let left = player.origin[0];
+//         let right = player.origin[0] + player.dimensions[0];
+//         let top = player.origin[1];
+//         let bot = player.origin[1] + player.dimensions[1];
+//         levelWalls.forEach(crate => {
+//             if (crate.canPush) {
+//                 let leftSide = crate.origin[0];
+//                 let rightSide = crate.origin[0] + crate.dimensions[0];
+//                 let topSide = crate.origin[1];
+//                 let botSide = crate.origin[1] + bot.dimensions[1];
+                
+//             }
+//         })
+//     })
+// }
 function bulletDetection() {
     bulletArray.forEach(bullet => {
         let leftSide = bullet.origin[0];
@@ -350,7 +371,7 @@ function bulletDetection() {
             if ((leftSide >= left && leftSide <= right) || (rightSide >= left && rightSide <= left)) {
                 if ((topSide >= top && topSide <= bot) || botSide >= top && botSide <= bot) {
                     if (player.playerID === bullet.bulletID) {
-                        bullet.shouldKeepShowingBullet
+                        bullet.shouldKeepShowingBullet = true;
                     } else {
                         if (bullet.direction === 'right'){
                             player.velocity[0] += bullet.horizontalSpeed * 2;
@@ -359,6 +380,7 @@ function bulletDetection() {
                             player.velocity[0] -= bullet.horizontalSpeed * 2;
                             player.velocity[1] += bullet.verticalSpeed * 4;
                         }
+                        player.knockbackCounter = 0;
                         bullet.shouldKeepShowingBullet = false;
                     }
                 }
@@ -395,16 +417,20 @@ let InputHandler = (() => {
     document.addEventListener("keydown", event => {
       switch (event.key) {
           case "ArrowLeft":
-              currentPlayers[0].Acceleration();
-              currentPlayers[0].Walk();
-              currentPlayers[0].direction = 'left';
-              currentPlayers[0].velocity[0] = -currentPlayers[0].horizontalSpeed - currentPlayers[0].horAccel;
+              if (currentPlayers[0].knockbackCounter >= 10) {
+                  currentPlayers[0].Acceleration();
+                  currentPlayers[0].Walk();
+                  currentPlayers[0].direction = 'left';
+                  currentPlayers[0].velocity[0] = -currentPlayers[0].horizontalSpeed - currentPlayers[0].horAccel;
+              }
               break;
           case "ArrowRight":
-              currentPlayers[0].Acceleration();
-              currentPlayers[0].Walk();
-              currentPlayers[0].direction = 'right';
-              currentPlayers[0].velocity[0] = currentPlayers[0].horizontalSpeed + currentPlayers[0].horAccel;
+              if (currentPlayers[0].knockbackCounter >= 10){
+                  currentPlayers[0].Acceleration();
+                  currentPlayers[0].Walk();
+                  currentPlayers[0].direction = 'right';
+                  currentPlayers[0].velocity[0] = currentPlayers[0].horizontalSpeed + currentPlayers[0].horAccel;
+              }
               break;
           case "ArrowUp":
               break;

@@ -32,7 +32,6 @@ assignAttributes(source, { // this makes the canvas fit in the window
 })
 let controllerRight = false;
 let controllerLeft = false;
-
 let controllerRight2 = false;
 let controllerLeft2 = false;
 
@@ -105,11 +104,13 @@ function gameLoop() {
         }
         //Right on DPAD
         if(gamepads[0].buttons[15].pressed){
-            currentPlayers[0].Acceleration();
-            currentPlayers[0].Walk();
-            currentPlayers[0].direction = 'right';
-            controllerRight = true;
-            currentPlayers[0].velocity[0] = currentPlayers[0].horizontalSpeed + currentPlayers[0].horAccel;
+            if (currentPlayers[0].knockbackCounter >= 10){
+                currentPlayers[0].Acceleration();
+                currentPlayers[0].Walk();
+                currentPlayers[0].direction = 'right';
+                controllerRight = true;
+                currentPlayers[0].velocity[0] = currentPlayers[0].horizontalSpeed + currentPlayers[0].horAccel;
+            }
         }
         else if (gamepads[0].buttons[15].pressed === false && controllerRight === true){
               currentPlayers[0].counter = 0;
@@ -120,11 +121,13 @@ function gameLoop() {
         }
         //Left on DPAD
         if (gamepads[0].buttons[14].pressed){
-            currentPlayers[0].Acceleration();
-            currentPlayers[0].Walk();
-            currentPlayers[0].direction = 'left';
-            controllerLeft = true;
-            currentPlayers[0].velocity[0] = -currentPlayers[0].horizontalSpeed - currentPlayers[0].horAccel;
+            if (currentPlayers[0].knockbackCounter >= 10){
+                currentPlayers[0].Acceleration();
+                currentPlayers[0].Walk();
+                currentPlayers[0].direction = 'left';
+                controllerLeft = true;
+                currentPlayers[0].velocity[0] = -currentPlayers[0].horizontalSpeed - currentPlayers[0].horAccel;
+            }
         }
         else if (gamepads[0].buttons[14].pressed === false && controllerLeft === true){
           currentPlayers[0].counter = 0;
@@ -137,6 +140,7 @@ function gameLoop() {
         //down on DPAD
         if (gamepads[0].buttons[13].pressed)
         {
+            currentPlayers.drawImage 
             currentPlayers[0].velocity[0] = 0;
         }
         //A button on Xbox Controller
@@ -187,11 +191,13 @@ function gameLoop() {
         }
         //Right on DPAD
         if(gamepads[1].buttons[15].pressed){
-            currentPlayers[1].Acceleration();
-            currentPlayers[1].Walk();
-            currentPlayers[1].direction = 'right';
-            controllerRight2 = true;
-            currentPlayers[1].velocity[0] = currentPlayers[1].horizontalSpeed + currentPlayers[1].horAccel;
+            if (currentPlayers[1].knockbackCounter >= 10) {
+                currentPlayers[1].Acceleration();
+                currentPlayers[1].Walk();
+                currentPlayers[1].direction = 'right';
+                controllerRight2 = true;
+                currentPlayers[1].velocity[0] = currentPlayers[1].horizontalSpeed + currentPlayers[1].horAccel;
+            }
         }
         else if (gamepads[1].buttons[15].pressed === false && controllerRight2 === true){
               currentPlayers[1].counter = 0;
@@ -202,11 +208,13 @@ function gameLoop() {
         }
         //Left on DPAD
         if (gamepads[1].buttons[14].pressed){
-            currentPlayers[1].Acceleration();
-            currentPlayers[1].Walk();
-            currentPlayers[1].direction = 'left';
-            controllerLeft2 = true;
-            currentPlayers[1].velocity[0] = -currentPlayers[1].horizontalSpeed - currentPlayers[1].horAccel;
+            if (currentPlayers[1].knockbackCounter >= 10) {
+                currentPlayers[1].Acceleration();
+                currentPlayers[1].Walk();
+                currentPlayers[1].direction = 'left';
+                currentPlayers[1].velocity[0] = -currentPlayers[0].horizontalSpeed - currentPlayers[0].horAccel;
+                controllerLeft2 = true;
+            }
         }
         else if (gamepads[1].buttons[14].pressed === false && controllerLeft2 === true){
           currentPlayers[1].counter = 0;
