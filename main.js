@@ -24,6 +24,22 @@ function updateScores() {
 score1.textContent = (`Player1 Score: ${playerscore1}`);
 score2.textContent = (`Player2 Score: ${playerscore2}`);
 
+let playerscore1 = 0;
+let playerscore2 = 0;
+
+function updateScores() {
+    currentPlayers.forEach(player => {
+        if (player.playerID === 1){
+            playerscore1 = currentPlayers[0].score;
+            score1.textContent = (`Player1 Score: ${playerscore1}`);
+        } else if (player.playerID === 2) {
+            playerscore2 = currentPlayers[1].score;
+            score2.textContent = (`Player2 Score: ${playerscore2}`);
+        }
+    })
+}
+score1.textContent = (`Player1 Score: ${playerscore1}`);
+score2.textContent = (`Player2 Score: ${playerscore2}`);
 
 assignAttributes(source, { // this makes the canvas fit in the window
   id: 'source',
@@ -72,8 +88,6 @@ function deleteObjects() {
 }
 function gameLoop() {
     const gamepads = navigator.getGamepads();
-
-    
  
     if(gamepads[0]) {
         const gamepadState ={
