@@ -6,9 +6,23 @@ function assignAttributes(element, attributes) {
 
 let score1 = document.getElementById("scores1");
 let score2 = document.getElementById("scores2");
+let playerscore1 = 0;
+let playerscore2 = 0;
 
-score1.textContent = (`Player1 Score: ${currentPlayers[0].score}`);
-score2.textContent = (`Player2 Score: ${currentPlayers[1].score}`);
+function updateScores() {
+    currentPlayers.forEach(player => {
+        if (player.playerID === 1){
+            playerscore1 = currentPlayers[0].score;
+            score1.textContent = (`Player1 Score: ${playerscore1}`);
+        } else if (player.playerID === 2) {
+            playerscore2 = currentPlayers[1].score;
+            score2.textContent = (`Player2 Score: ${playerscore2}`);
+        }
+
+    })
+}
+score1.textContent = (`Player1 Score: ${playerscore1}`);
+score2.textContent = (`Player2 Score: ${playerscore2}`);
 
 let playerscore1 = 0;
 let playerscore2 = 0;
@@ -66,7 +80,7 @@ function moveObjects() {
         player.Move();
     })
     bulletArray.forEach(bullet => {
-        bullet.Move(    );
+        bullet.Move();
     })
 }
 function deleteObjects() {
@@ -148,7 +162,10 @@ function gameLoop() {
         //X Button on Xbox Controller
         if (gamepads[0].buttons[2].pressed)
         {
-            currentPlayers[0].bulletCreate();
+            if (currentPlayers[0].bulletROF >= 60) {
+                currentPlayers[0].bulletCreate();
+                currentPlayers[0].bulletROF === 0;
+            }
         }
         //gamepadDisplay.textContent = JSON.stringify(gamepadState, null, 2);
     }
@@ -227,7 +244,11 @@ function gameLoop() {
         //X Button on Xbox Controller
         if (gamepads[1].buttons[2].pressed)
         {
-            currentPlayers[1].bulletCreate();
+            if (currentPlayers[1].bulletROF >= 60) {
+                console.log(currentPlayers[1].bulletROF);
+                currentPlayers[1].bulletCreate();
+                currentPlayers[1].bulletROF === 0;
+            }
         }
         //gamepadDisplay2.textContent = JSON.stringify(gamepadState1, null, 2);
     }

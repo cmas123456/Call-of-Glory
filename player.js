@@ -28,6 +28,7 @@ function playerCreate(x,y,playerID = 1) {
     player = {
         playerID: playerID,
         origin:[x,y],
+        bulletROF: 60,
         dimensions:[24,32],
         image: playerWalk1,
         velocity: [0, 0],
@@ -44,12 +45,15 @@ function playerCreate(x,y,playerID = 1) {
         score: 0,
         direction: 'right',
         bulletCreate() {
+            this.bulletROF = 0;
             let bullet = {
                 origin: [this.origin[0] + this.dimensions[0], this.origin[1] + (this.dimensions[1] / 2)],
+                bulletID: this.playerID,
                 dimensions: [10, 2],
                 image : bulletImg,
                 shouldKeepShowingBullet: true,
                 horizontalSpeed: 5,
+                verticalSpeed: 0,
                 travelDistance: 0,
                 gravity: 1,
                 direction: this.direction,
@@ -57,15 +61,18 @@ function playerCreate(x,y,playerID = 1) {
                         context.drawImage(bullet.image, bullet.origin[0], bullet.origin[1], bullet.dimensions[0],  bullet.dimensions[1]);
                     }, 
                 Move() {
-                    if (bullet.origin[0] < 800 && bullet.origin[0] > 0){
+                    if (bullet.origin[0] < 850 && bullet.origin[0] > -50){
                         if (bullet.direction === 'left'){
                             bullet.origin[0] -= bullet.horizontalSpeed;
                             bullet.travelDistance += bullet.horizontalSpeed;
                             if (bullet.travelDistance > 100) {
+                                bullet.verticalSpeed = -bullet.gravity * 3;
                                 bullet.origin[1] += bullet.gravity;
                                 if (bullet.travelDistance > 200) {
+                                    bullet.verticalSpeed = -bullet.gravity * 6;
                                     bullet.origin[1] += bullet.gravity
                                     if (bullet.travelDistance > 300) {
+                                        bullet.verticalSpeed = -bullet.gravity * 9;
                                         bullet.origin[1] += bullet.gravity;
                                     }
                                 }
@@ -75,10 +82,13 @@ function playerCreate(x,y,playerID = 1) {
                         bullet.origin[0] += bullet.horizontalSpeed;
                         bullet.travelDistance += bullet.horizontalSpeed;
                         if (bullet.travelDistance > 100){
+                            bullet.verticalSpeed = bullet.gravity * 3;
                             bullet.origin[1] += bullet.gravity;
                             if (bullet.travelDistance > 200) {
+                                bullet.verticalSpeed = bullet.gravity * 6;
                                 bullet.origin[1] += bullet.gravity;
                                 if (bullet.travelDistance > 300) {
+                                    bullet.verticalSpeed = bullet.gravity * 9;
                                     bullet.origin[1] += bullet.gravity;
                                 }
                             }
@@ -122,6 +132,9 @@ function playerCreate(x,y,playerID = 1) {
             }
         },
         Move() {
+            if (this.bulletROF < 60){
+                this.bulletROF += 2;
+            }
             let nextX = this.origin[0] + this.velocity[0];
             let nextY = this.origin[1] + this.velocity[1];
             let isPlayerOnPlatform = false;
@@ -252,7 +265,7 @@ function playerCreate(x,y,playerID = 1) {
             if (this.animCounter === 18){
                 if (this.playerID === 2){
                     this.image = redWalk7
-                } else {
+                } else {    
                     this.image = playerWalk7;
                 }
             }
@@ -311,7 +324,7 @@ function bulletDetection() {
         let leftSide = bullet.origin[0];
         let rightSide = bullet.origin[0] + bullet.dimensions[0];
         let topSide = bullet.origin[1];
-        let botSide = bullet.origin[1] + bullet.dimensions[0]
+        let botSide = bullet.origin[1] + bullet.dimensions[0];
         levelWalls.forEach(wall => {
             let left = wall.origin[0];
             let right = wall.origin[0] + wall.dimensions[0];
@@ -322,6 +335,35 @@ function bulletDetection() {
                     bullet.shouldKeepShowingBullet = false;
                 }
             } 
+        })
+    })
+    bulletArray.forEach(bullet => {
+        let leftSide = bullet.origin[0];
+        let rightSide = bullet.origin[0] + bullet.dimensions[0];
+        let topSide = bullet.origin[1];
+        let botSide = bullet.origin[1] + bullet.dimensions[0];
+        currentPlayers.forEach(player => {
+            let left = player.origin[0];
+            let right = player.origin[0] + player.dimensions[0];
+            let top = player.origin[1];
+            let bot = player.origin[1] + player.dimensions[1];
+            if ((leftSide >= left && leftSide <= right) || (rightSide >= left && rightSide <= left)) {
+                if ((topSide >= top && topSide <= bot) || botSide >= top && botSide <= bot) {
+                    if (player.playerID === bullet.bulletID) {
+                        bullet.shouldKeepShowingBullet
+                    } else {
+                        if (bullet.direction === 'right'){
+                            player.velocity[0] += bullet.horizontalSpeed * 2;
+                            player.velocity[1] += bullet.verticalSpeed * 2;
+                        } else if (bullet.direction === 'left') {
+                            player.velocity[0] -= bullet.horizontalSpeed * 2;
+                            player.velocity[1] += bullet.verticalSpeed * 2;
+                        }
+                        bullet.shouldKeepShowingBullet = false;
+                    }
+                }
+            } 
+
         })
     })
 }
@@ -369,7 +411,9 @@ let InputHandler = (() => {
           case "ArrowDown":
               break;
           case "z": 
-              currentPlayers[0].bulletCreate();
+              if (currentPlayers[0].bulletROF >= 60) {
+                  currentPlayers[0].bulletCreate();
+              }
               break;
           case ' ':
               if (currentPlayers[0].isOnPlatform){
