@@ -41,6 +41,7 @@ function playerCreate(x,y,playerID = 1) {
         animCounter: 0,
         jumpCounter: 0,
         counter: 0,
+        score: 0,
         direction: 'right',
         bulletCreate() {
             let bullet = {
@@ -348,16 +349,24 @@ function bulletDetection() {
     })
 }
 function isDead() {
-    currentPlayers.forEach(player => {
-        if (player.origin[0] < -50 || player.origin[0] > 850 || player.origin[1] > 700) {
-            player.lives--;
-            player.origin[0] = 50;
-            player.origin[1] = 200;
+        if (currentPlayers[0].origin[0] < -50 ||currentPlayers[0].origin[0] > 850 ||currentPlayers[0].origin[1] > 700) {
+            console.log(currentPlayers[1].score)
+            currentPlayers[0].lives--;
+            currentPlayers[0].origin[0] = 50;
+            currentPlayers[0].origin[1] = 200;
+            currentPlayers[1].score += 1;
         }
-    });
-}
+        if(currentPlayers[1].origin[0] < -50 ||currentPlayers[1].origin[0] > 850 ||currentPlayers[1].origin[1] > 700) {
+            console.log(currentPlayers[0].score)
+            currentPlayers[1].lives--;
+            currentPlayers[1].origin[0] = 650;
+            currentPlayers[1].origin[1] = 200;
+            currentPlayers[0].score += 1; 
+        }
+    };
+
 playerCreate(50,200,1);   
-playerCreate(100,200,2);
+playerCreate(650,200,2);
 
 let InputHandler = (() => {
     document.addEventListener("keydown", event => {
