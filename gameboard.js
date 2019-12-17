@@ -1,5 +1,8 @@
 let levelWalls = [];
 let platformImg = document.getElementById('platform');
+let platform2Img = document.getElementById('platform2');
+let girderHImg = document.getElementById('girderH');
+let girderVImg = document.getElementById('girderV');
 let crateImg = document.getElementById('crate');
 goUp = true;
 
@@ -67,45 +70,6 @@ function gravitys(){
     })
 }
 
-
-// function isOnTop (){
-
-//     levelWalls.forEach(wall => {
-
-//         levelWalls.forEach(ball =>{
-
-//             if (wall.origin[1] + wall.height >= ball.origin[1]  ){
-//             if (wall.canPush && !ball.canPush){
-
-//                 if (wall.origin[0] <=  ball.origin[0]  && wall.origin[0] >= ball.origin[0]  ){
-                  
-                
-//                     wall.isOn = true;
-//                 }
-// else{
-// console.log("The wall is not safe")
-// wall.isOn  = false;
-    
-// }
-//             }
-
-
-
-
-//             }
-
-//         })
-
-
-
-//     })
-
-
-
-
-// }
-
-
 function isOnTop() {
     levelWalls.forEach(crate => {
         crate.isOn = true;
@@ -131,39 +95,39 @@ function levelOne () {
     //draw  first 
     createWalls(50,500,100,20, platformImg);
     createWalls(100 ,480 ,20 ,20,crateImg, true);
-    createWalls(200,500,100,20, platformImg);
+    createWalls(200,500,100,20, platform2Img);
     createWalls(250,480 ,20,20,crateImg, true);
     createWalls(350 ,500,100,20, platformImg);
     createWalls(400 ,480 ,20 ,20,crateImg, true);
-    createWalls(500 ,500,100,20, platformImg);
+    createWalls(500 ,500,100,20, platform2Img);
     createWalls(550 ,480,20,20,crateImg, true);
     createWalls(650,500,100,20, platformImg);
     createWalls(660,480 ,20,20,crateImg, true);
  
     //draw second
-    createWalls(115 , 400 , 75 , 20, platformImg);
+    createWalls(115 , 400 , 75 , 20, platform2Img);
     createWalls(170 , 380 , 20 , 20,crateImg, true);
     createWalls(245 , 400 , 75 , 20, platformImg);
     createWalls(300 , 380 , 20 , 20,crateImg, true);
     createWalls(435 , 400 , 75 , 20, platformImg);
     createWalls(435 , 380 , 20 , 20,crateImg, true);
-    createWalls(560  , 400 , 75 , 20, platformImg);
+    createWalls(560  , 400 , 75 , 20, platform2Img);
     createWalls(560 , 380 , 20 , 20,crateImg,true);
  
     //draw third 
  
-    createWalls(225 , 300 , 50 , 20);
-    createWalls(255 , 260 , 20 , 40);
-    createWalls(340 , 300 , 75 , 20, platformImg,false,true, 220, 380);
-    createWalls(500 , 300 , 50 , 20);
-    createWalls(500 , 260 , 20 , 40);
+    createWalls(225 , 300 , 70, 20, girderHImg);
+    createWalls(255 , 260 , 20, 70, girderVImg);
+    createWalls(340 , 300 , 75 , 20, platform2Img,false,true, 220, 350);
+    createWalls(485 , 300 , 70 , 20, girderHImg);
+    createWalls(500 , 260 , 20 , 70, girderVImg);
  
     //draw fourth 
-    createWalls(285 , 200 , 35, 20);
-    createWalls(430, 200 , 35, 20);
+    createWalls(285 , 200 , 35, 20, platform2Img);
+    createWalls(430, 200 , 35, 20, platform2Img);
  
     //draw top 
-    createWalls(355 ,  125 , 35, 20);
+    createWalls(355 ,  125 , 35, 20, platform2Img);
 }
 function levelTwo () {
     //draw  first 

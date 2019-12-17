@@ -4,10 +4,37 @@ function assignAttributes(element, attributes) {
 	Object.keys(attributes).forEach(key => element.setAttribute(key, attributes[key]))
 }
 
+assignAttributes(source, { // this makes the canvas fit in the window
+    id: 'source',
+	height: 600,
+	width: 800,
+})
+let controllerRight = false;
+let controllerLeft = false;
+
+let controllerRight2 = false;
+let controllerLeft2 = false;
+
 let score1 = document.getElementById("scores1");
 let score2 = document.getElementById("scores2");
+
 let playerscore1 = 0;
 let playerscore2 = 0;
+
+score1.textContent = (`Player1 Score: ${playerscore1}`);
+score2.textContent = (`Player2 Score: ${playerscore2}`);
+
+
+let controllerRight = false;
+let controllerLeft = false;
+let controllerRight2 = false;
+let controllerLeft2 = false;
+let currentWall = {
+
+    origin : [0,0],
+    dimensions : [0,0]
+
+}
 
 function updateScores() {
     currentPlayers.forEach(player => {
@@ -18,27 +45,7 @@ function updateScores() {
             playerscore2 = currentPlayers[1].score;
             score2.textContent = (`Player2 Score: ${playerscore2}`);
         }
-
     })
-}
-score1.textContent = (`Player1 Score: ${playerscore1}`);
-score2.textContent = (`Player2 Score: ${playerscore2}`);
-
-
-assignAttributes(source, { // this makes the canvas fit in the window
-  id: 'source',
-	height: 600,
-	width: 800,
-})
-let controllerRight = false;
-let controllerLeft = false;
-let controllerRight2 = false;
-let controllerLeft2 = false;
-let currentWall = {
-
-    origin : [0,0],
-    dimensions : [0,0]
-
 }
 
 // const gamepadDisplay = document.getElementById('gamepad-display');
