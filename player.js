@@ -42,6 +42,8 @@ function playerCreate(x,y,playerID = 1) {
         vertAccel: 0,
         animCounter: 0,
         jumpCounter: 0,
+        isAi: false,
+        movingOver: false,
         counter: 0,
         score: 0,
         direction: 'right',
@@ -221,6 +223,10 @@ function playerCreate(x,y,playerID = 1) {
                 while (this.jumpCounter <= 1.2) {
                     this.jumpCounter += .3;
                     this.velocity[1] -= this.jumpCounter;
+
+                    if (this.isAi &&this.movingOver){
+                        this.origin[0]++;
+                    }
                     
                     if (this.jumpCounter > 1.2) {
                         this.jumpCounter = 0;
