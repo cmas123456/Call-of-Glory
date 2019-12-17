@@ -28,11 +28,13 @@ function playerCreate(x,y,playerID = 1) {
     player = {
         playerID: playerID,
         origin:[x,y],
+        bulletROF: 60,
         dimensions:[24,32],
         image: playerWalk1,
         velocity: [0, 0],
         horizontalSpeed: 1,
         verticalSpeed: 1,
+        knockbackCounter: 10,
         lives: 5,
         attachedHorizontalSpeed: 0,
         attachedVerticalSpeed: 0,
@@ -43,14 +45,18 @@ function playerCreate(x,y,playerID = 1) {
         isAi: false,
         movingOver: false,
         counter: 0,
+        score: 0,
         direction: 'right',
         bulletCreate() {
+            this.bulletROF = 0;
             let bullet = {
                 origin: [this.origin[0] + this.dimensions[0], this.origin[1] + (this.dimensions[1] / 2)],
+                bulletID: this.playerID,
                 dimensions: [10, 2],
                 image : bulletImg,
                 shouldKeepShowingBullet: true,
                 horizontalSpeed: 5,
+                verticalSpeed: 0,
                 travelDistance: 0,
                 gravity: 1,
                 direction: this.direction,
@@ -58,15 +64,18 @@ function playerCreate(x,y,playerID = 1) {
                         context.drawImage(bullet.image, bullet.origin[0], bullet.origin[1], bullet.dimensions[0],  bullet.dimensions[1]);
                     }, 
                 Move() {
-                    if (bullet.origin[0] < 800 && bullet.origin[0] > 0){
+                    if (bullet.origin[0] < 850 && bullet.origin[0] > -50){
                         if (bullet.direction === 'left'){
                             bullet.origin[0] -= bullet.horizontalSpeed;
                             bullet.travelDistance += bullet.horizontalSpeed;
                             if (bullet.travelDistance > 100) {
+                                bullet.verticalSpeed = -bullet.gravity * 3;
                                 bullet.origin[1] += bullet.gravity;
                                 if (bullet.travelDistance > 200) {
+                                    bullet.verticalSpeed = -bullet.gravity * 6;
                                     bullet.origin[1] += bullet.gravity
                                     if (bullet.travelDistance > 300) {
+                                        bullet.verticalSpeed = -bullet.gravity * 9;
                                         bullet.origin[1] += bullet.gravity;
                                     }
                                 }
@@ -76,10 +85,13 @@ function playerCreate(x,y,playerID = 1) {
                         bullet.origin[0] += bullet.horizontalSpeed;
                         bullet.travelDistance += bullet.horizontalSpeed;
                         if (bullet.travelDistance > 100){
+                            bullet.verticalSpeed = bullet.gravity * 3;
                             bullet.origin[1] += bullet.gravity;
                             if (bullet.travelDistance > 200) {
+                                bullet.verticalSpeed = bullet.gravity * 6;
                                 bullet.origin[1] += bullet.gravity;
                                 if (bullet.travelDistance > 300) {
+                                    bullet.verticalSpeed = bullet.gravity * 9;
                                     bullet.origin[1] += bullet.gravity;
                                 }
                             }
@@ -123,6 +135,12 @@ function playerCreate(x,y,playerID = 1) {
             }
         },
         Move() {
+            if (this.bulletROF < 60){
+                this.bulletROF += 2;
+            }
+            if (this.knockbackCounter < 10) {
+                this.knockbackCounter++;
+            }
             let nextX = this.origin[0] + this.velocity[0];
             let nextY = this.origin[1] + this.velocity[1];
             let isPlayerOnPlatform = false;
@@ -257,7 +275,7 @@ function playerCreate(x,y,playerID = 1) {
             if (this.animCounter === 18){
                 if (this.playerID === 2){
                     this.image = redWalk7
-                } else {
+                } else {    
                     this.image = playerWalk7;
                 }
             }
@@ -311,12 +329,29 @@ function playerGravity() {
     })
 }
 
+// function crateSplat () {
+//     currentPlayers.forEach(player => {
+//         let left = player.origin[0];
+//         let right = player.origin[0] + player.dimensions[0];
+//         let top = player.origin[1];
+//         let bot = player.origin[1] + player.dimensions[1];
+//         levelWalls.forEach(crate => {
+//             if (crate.canPush) {
+//                 let leftSide = crate.origin[0];
+//                 let rightSide = crate.origin[0] + crate.dimensions[0];
+//                 let topSide = crate.origin[1];
+//                 let botSide = crate.origin[1] + bot.dimensions[1];
+                
+//             }
+//         })
+//     })
+// }
 function bulletDetection() {
     bulletArray.forEach(bullet => {
         let leftSide = bullet.origin[0];
         let rightSide = bullet.origin[0] + bullet.dimensions[0];
         let topSide = bullet.origin[1];
-        let botSide = bullet.origin[1] + bullet.dimensions[0]
+        let botSide = bullet.origin[1] + bullet.dimensions[0];
         levelWalls.forEach(wall => {
             let left = wall.origin[0];
             let right = wall.origin[0] + wall.dimensions[0];
@@ -329,40 +364,88 @@ function bulletDetection() {
             } 
         })
     })
+    bulletArray.forEach(bullet => {
+        let leftSide = bullet.origin[0];
+        let rightSide = bullet.origin[0] + bullet.dimensions[0];
+        let topSide = bullet.origin[1];
+        let botSide = bullet.origin[1] + bullet.dimensions[0];
+        currentPlayers.forEach(player => {
+            let left = player.origin[0];
+            let right = player.origin[0] + player.dimensions[0];
+            let top = player.origin[1];
+            let bot = player.origin[1] + player.dimensions[1];
+            if ((leftSide >= left && leftSide <= right) || (rightSide >= left && rightSide <= left)) {
+                if ((topSide >= top && topSide <= bot) || botSide >= top && botSide <= bot) {
+                    if (player.playerID === bullet.bulletID) {
+                        bullet.shouldKeepShowingBullet = true;
+                    } else {
+                        if (bullet.direction === 'right'){
+                            player.velocity[0] += bullet.horizontalSpeed * 2;
+                            player.velocity[1] += bullet.verticalSpeed * 4;
+                        } else if (bullet.direction === 'left') {
+                            player.velocity[0] -= bullet.horizontalSpeed * 2;
+                            player.velocity[1] += bullet.verticalSpeed * 4;
+                        }
+                        player.knockbackCounter = 0;
+                        bullet.shouldKeepShowingBullet = false;
+                    }
+                }
+            } 
+
+        })
+    })
 }
 function isDead() {
-    currentPlayers.forEach(player => {
-        if (player.origin[0] < -50 || player.origin[0] > 850 || player.origin[1] > 700) {
-            player.lives--;
-            player.origin[0] = 50;
-            player.origin[1] = 200;
+        if (currentPlayers[0].origin[0] < -50 ||currentPlayers[0].origin[0] > 850 ||currentPlayers[0].origin[1] > 700) {
+            console.log(currentPlayers[1].score)
+            currentPlayers[0].lives--;
+            currentPlayers[0].velocity[0] = 0;
+            currentPlayers[0].velocity[1] = 0;
+            currentPlayers[0].origin[0] = 50;
+            currentPlayers[0].origin[1] = 200;
+            currentPlayers[1].score += 1;
         }
-    });
-}
+        if(currentPlayers[1].origin[0] < -50 ||currentPlayers[1].origin[0] > 850 ||currentPlayers[1].origin[1] > 700) {
+            console.log(currentPlayers[0].score)
+            currentPlayers[1].lives--;
+            currentPlayers[1].velocity[0] = 0;
+            currentPlayers[1].velocity[1] = 0;
+            currentPlayers[1].origin[0] = 650;
+            currentPlayers[1].origin[1] = 200;
+            currentPlayers[0].score += 1; 
+        }
+    };
+
 playerCreate(50,200,1);   
-playerCreate(100,200,2);
+playerCreate(650,200,2);
 
 let InputHandler = (() => {
     document.addEventListener("keydown", event => {
       switch (event.key) {
           case "ArrowLeft":
-              currentPlayers[0].Acceleration();
-              currentPlayers[0].Walk();
-              currentPlayers[0].direction = 'left';
-              currentPlayers[0].velocity[0] = -currentPlayers[0].horizontalSpeed - currentPlayers[0].horAccel;
+              if (currentPlayers[0].knockbackCounter >= 10) {
+                  currentPlayers[0].Acceleration();
+                  currentPlayers[0].Walk();
+                  currentPlayers[0].direction = 'left';
+                  currentPlayers[0].velocity[0] = -currentPlayers[0].horizontalSpeed - currentPlayers[0].horAccel;
+              }
               break;
           case "ArrowRight":
-              currentPlayers[0].Acceleration();
-              currentPlayers[0].Walk();
-              currentPlayers[0].direction = 'right';
-              currentPlayers[0].velocity[0] = currentPlayers[0].horizontalSpeed + currentPlayers[0].horAccel;
+              if (currentPlayers[0].knockbackCounter >= 10){
+                  currentPlayers[0].Acceleration();
+                  currentPlayers[0].Walk();
+                  currentPlayers[0].direction = 'right';
+                  currentPlayers[0].velocity[0] = currentPlayers[0].horizontalSpeed + currentPlayers[0].horAccel;
+              }
               break;
           case "ArrowUp":
               break;
           case "ArrowDown":
               break;
           case "z": 
-              currentPlayers[0].bulletCreate();
+              if (currentPlayers[0].bulletROF >= 60) {
+                  currentPlayers[0].bulletCreate();
+              }
               break;
           case ' ':
               if (currentPlayers[0].isOnPlatform){

@@ -3,6 +3,28 @@ const source = document.createElement('canvas') //creates the canvas
 function assignAttributes(element, attributes) {
 	Object.keys(attributes).forEach(key => element.setAttribute(key, attributes[key]))
 }
+
+let score1 = document.getElementById("scores1");
+let score2 = document.getElementById("scores2");
+let playerscore1 = 0;
+let playerscore2 = 0;
+
+function updateScores() {
+    currentPlayers.forEach(player => {
+        if (player.playerID === 1){
+            playerscore1 = currentPlayers[0].score;
+            score1.textContent = (`Player1 Score: ${playerscore1}`);
+        } else if (player.playerID === 2) {
+            playerscore2 = currentPlayers[1].score;
+            score2.textContent = (`Player2 Score: ${playerscore2}`);
+        }
+
+    })
+}
+score1.textContent = (`Player1 Score: ${playerscore1}`);
+score2.textContent = (`Player2 Score: ${playerscore2}`);
+
+
 assignAttributes(source, { // this makes the canvas fit in the window
   id: 'source',
 	height: 600,
@@ -10,7 +32,6 @@ assignAttributes(source, { // this makes the canvas fit in the window
 })
 let controllerRight = false;
 let controllerLeft = false;
-
 let controllerRight2 = false;
 let controllerLeft2 = false;
 let currentWall = {
@@ -20,8 +41,8 @@ let currentWall = {
 
 }
 
-const gamepadDisplay = document.getElementById('gamepad-display');
-const gamepadDisplay2 = document.getElementById('gamepad-display2');
+// const gamepadDisplay = document.getElementById('gamepad-display');
+// const gamepadDisplay2 = document.getElementById('gamepad-display2');
 
 
 
@@ -56,7 +77,7 @@ function moveObjects() {
         player.Move();
     })
     bulletArray.forEach(bullet => {
-        bullet.Move(    );
+        bullet.Move();
     })
 }
 function deleteObjects() {
@@ -80,7 +101,7 @@ function movePlayer (){
 }
 function gameLoop() {
     const gamepads = navigator.getGamepads();
-   // movePlayer();
+
     if(gamepads[0]) {
         const gamepadState ={
             id: gamepads[0].id,
@@ -111,11 +132,13 @@ function gameLoop() {
         }
         //Right on DPAD
         if(gamepads[0].buttons[15].pressed){
-            currentPlayers[0].Acceleration();
-            currentPlayers[0].Walk();
-            currentPlayers[0].direction = 'right';
-            controllerRight = true;
-            currentPlayers[0].velocity[0] = currentPlayers[0].horizontalSpeed + currentPlayers[0].horAccel;
+            if (currentPlayers[0].knockbackCounter >= 10){
+                currentPlayers[0].Acceleration();
+                currentPlayers[0].Walk();
+                currentPlayers[0].direction = 'right';
+                controllerRight = true;
+                currentPlayers[0].velocity[0] = currentPlayers[0].horizontalSpeed + currentPlayers[0].horAccel;
+            }
         }
         else if (gamepads[0].buttons[15].pressed === false && controllerRight === true){
               currentPlayers[0].counter = 0;
@@ -126,11 +149,13 @@ function gameLoop() {
         }
         //Left on DPAD
         if (gamepads[0].buttons[14].pressed){
-            currentPlayers[0].Acceleration();
-            currentPlayers[0].Walk();
-            currentPlayers[0].direction = 'left';
-            controllerLeft = true;
-            currentPlayers[0].velocity[0] = -currentPlayers[0].horizontalSpeed - currentPlayers[0].horAccel;
+            if (currentPlayers[0].knockbackCounter >= 10){
+                currentPlayers[0].Acceleration();
+                currentPlayers[0].Walk();
+                currentPlayers[0].direction = 'left';
+                controllerLeft = true;
+                currentPlayers[0].velocity[0] = -currentPlayers[0].horizontalSpeed - currentPlayers[0].horAccel;
+            }
         }
         else if (gamepads[0].buttons[14].pressed === false && controllerLeft === true){
           currentPlayers[0].counter = 0;
@@ -143,6 +168,7 @@ function gameLoop() {
         //down on DPAD
         if (gamepads[0].buttons[13].pressed)
         {
+            currentPlayers.drawImage 
             currentPlayers[0].velocity[0] = 0;
         }
         //A button on Xbox Controller
@@ -154,9 +180,12 @@ function gameLoop() {
         //X Button on Xbox Controller
         if (gamepads[0].buttons[2].pressed)
         {
-            currentPlayers[0].bulletCreate();
+            if (currentPlayers[0].bulletROF >= 60) {
+                currentPlayers[0].bulletCreate();
+                currentPlayers[0].bulletROF === 0;
+            }
         }
-        gamepadDisplay.textContent = JSON.stringify(gamepadState, null, 2);
+        //gamepadDisplay.textContent = JSON.stringify(gamepadState, null, 2);
     }
 
 
@@ -190,11 +219,13 @@ function gameLoop() {
         }
         //Right on DPAD
         if(gamepads[1].buttons[15].pressed){
-            currentPlayers[1].Acceleration();
-            currentPlayers[1].Walk();
-            currentPlayers[1].direction = 'right';
-            controllerRight2 = true;
-            currentPlayers[1].velocity[0] = currentPlayers[1].horizontalSpeed + currentPlayers[1].horAccel;
+            if (currentPlayers[1].knockbackCounter >= 10) {
+                currentPlayers[1].Acceleration();
+                currentPlayers[1].Walk();
+                currentPlayers[1].direction = 'right';
+                controllerRight2 = true;
+                currentPlayers[1].velocity[0] = currentPlayers[1].horizontalSpeed + currentPlayers[1].horAccel;
+            }
         }
         else if (gamepads[1].buttons[15].pressed === false && controllerRight2 === true){
               currentPlayers[1].counter = 0;
@@ -205,11 +236,13 @@ function gameLoop() {
         }
         //Left on DPAD
         if (gamepads[1].buttons[14].pressed){
-            currentPlayers[1].Acceleration();
-            currentPlayers[1].Walk();
-            currentPlayers[1].direction = 'left';
-            controllerLeft2 = true;
-            currentPlayers[1].velocity[0] = -currentPlayers[1].horizontalSpeed - currentPlayers[1].horAccel;
+            if (currentPlayers[1].knockbackCounter >= 10) {
+                currentPlayers[1].Acceleration();
+                currentPlayers[1].Walk();
+                currentPlayers[1].direction = 'left';
+                currentPlayers[1].velocity[0] = -currentPlayers[0].horizontalSpeed - currentPlayers[0].horAccel;
+                controllerLeft2 = true;
+            }
         }
         else if (gamepads[1].buttons[14].pressed === false && controllerLeft2 === true){
           currentPlayers[1].counter = 0;
@@ -233,9 +266,13 @@ function gameLoop() {
         //X Button on Xbox Controller
         if (gamepads[1].buttons[2].pressed)
         {
-            currentPlayers[1].bulletCreate();
+            if (currentPlayers[1].bulletROF >= 60) {
+                console.log(currentPlayers[1].bulletROF);
+                currentPlayers[1].bulletCreate();
+                currentPlayers[1].bulletROF === 0;
+            }
         }
-        gamepadDisplay2.textContent = JSON.stringify(gamepadState1, null, 2);
+        //gamepadDisplay2.textContent = JSON.stringify(gamepadState1, null, 2);
     }
 
 
@@ -247,6 +284,13 @@ function gameLoop() {
     gravitys();
     isOnTop();
     isDead();
+    updateScores();
+
+    context.font = "20px Amatic";
+    context.fillStyle = 'red'
+    context.fillText(score1.textContent, (source.width/4) - 75, 50);
+    context.fillText(score2.textContent, (source.width/3) * 2, 50);
+
     window.requestAnimationFrame(gameLoop);
 }
 
