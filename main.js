@@ -9,11 +9,6 @@ assignAttributes(source, { // this makes the canvas fit in the window
 	height: 600,
 	width: 800,
 })
-let controllerRight = false;
-let controllerLeft = false;
-
-let controllerRight2 = false;
-let controllerLeft2 = false;
 
 let score1 = document.getElementById("scores1");
 let score2 = document.getElementById("scores2");
