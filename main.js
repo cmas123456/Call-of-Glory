@@ -25,7 +25,6 @@ score1.textContent = (`Player1 Score: ${playerscore1}`);
 score2.textContent = (`Player2 Score: ${playerscore2}`);
 
 
-<<<<<<< HEAD
 function updateScores() {
     currentPlayers.forEach(player => {
         if (player.playerID === 1){
@@ -37,18 +36,6 @@ function updateScores() {
         }
     })
 }
-=======
-assignAttributes(source, { // this makes the canvas fit in the window
-  id: 'source',
-	height: 600,
-	width: 800,
-})
-let controllerRight = false;
-let controllerLeft = false;
-let controllerRight2 = false;
-let controllerLeft2 = false;
-
->>>>>>> b9c5591b751c8c07294b06d8e86291637c48f892
 // const gamepadDisplay = document.getElementById('gamepad-display');
 // const gamepadDisplay2 = document.getElementById('gamepad-display2');
 
@@ -270,11 +257,7 @@ function gameLoop() {
     gravitys();
     isOnTop();
     isDead();
-<<<<<<< HEAD
-    updateScores()
-=======
     updateScores();
->>>>>>> b9c5591b751c8c07294b06d8e86291637c48f892
 
     context.font = "20px Amatic";
     context.fillStyle = 'red'
