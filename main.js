@@ -25,6 +25,17 @@ score1.textContent = (`Player1 Score: ${playerscore1}`);
 score2.textContent = (`Player2 Score: ${playerscore2}`);
 
 
+let controllerRight = false;
+let controllerLeft = false;
+let controllerRight2 = false;
+let controllerLeft2 = false;
+let currentWall = {
+
+    origin : [0,0],
+    dimensions : [0,0]
+
+}
+
 function updateScores() {
     currentPlayers.forEach(player => {
         if (player.playerID === 1){
@@ -36,6 +47,7 @@ function updateScores() {
         }
     })
 }
+<<<<<<< HEAD
 score1.textContent = (`Player1 Score: ${playerscore1}`);
 score2.textContent = (`Player2 Score: ${playerscore2}`);
 
@@ -55,6 +67,8 @@ let currentWall = {
     dimensions : [0,0]
 
 }
+=======
+>>>>>>> c9d8f0fbc5b498038d5be583c27ad6d3de224479
 
 // const gamepadDisplay = document.getElementById('gamepad-display');
 // const gamepadDisplay2 = document.getElementById('gamepad-display2');
