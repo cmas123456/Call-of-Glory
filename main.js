@@ -10,6 +10,35 @@ assignAttributes(source, { // this makes the canvas fit in the window
 	width: 800,
 })
 
+document.body.appendChild(source) // adds the canvas to the webpage
+const context = source.getContext('2d', {alpha: 'false'})
+
+function startMenu(){
+    context.fillStyle = "#1d314a";
+    context.fillRect(0, 0, source.width, source.height);
+    context.drawImage(stage1, 50,350, 200, 150)
+    context.drawImage(stage2, 300,350, 200,150)
+    context.drawImage(stage3, 550,350, 200,150)
+
+//ctx.addEventListener(onclick)
+}
+
+function changeSize(event)
+        {   
+            console.log("help!!!");
+            event.style.width = 300;
+            //let display = document.getElementById(x)
+            event.style.height = 225;
+            console.log(event)
+        }
+
+function changeSize1(event)
+        {
+            event.style.width = 200;
+            //let display = document.getElementById(x)
+            event.style.height = 150;
+        }
+
 let score1 = document.getElementById("scores1");
 let score2 = document.getElementById("scores2");
 
@@ -42,36 +71,10 @@ function updateScores() {
         }
     })
 }
-<<<<<<< HEAD
-score1.textContent = (`Player1 Score: ${playerscore1}`);
-score2.textContent = (`Player2 Score: ${playerscore2}`);
-
-
-assignAttributes(source, { // this makes the canvas fit in the window
-  id: 'source',
-	height: 600,
-	width: 800,
-})
-let controllerRight = false;
-let controllerLeft = false;
-let controllerRight2 = false;
-let controllerLeft2 = false;
-let currentWall = {
-
-    origin : [0,0],
-    dimensions : [0,0]
-
-}
-=======
->>>>>>> c9d8f0fbc5b498038d5be583c27ad6d3de224479
 
 // const gamepadDisplay = document.getElementById('gamepad-display');
 // const gamepadDisplay2 = document.getElementById('gamepad-display2');
 
-
-
-document.body.appendChild(source) // adds the canvas to the webpage
-const context = source.getContext('2d', {alpha: 'false'})
 
 function drawObjects() {
     context.clearRect(0, 0, 800, 600);
@@ -327,4 +330,5 @@ window.addEventListener('gamepaddisconnected', event => {
     console.log(event.gamepad);
 })
 
+//startMenu();
 gameLoop();

@@ -4,10 +4,14 @@ let platform2Img = document.getElementById('platform2');
 let girderHImg = document.getElementById('girderH');
 let girderVImg = document.getElementById('girderV');
 let crateImg = document.getElementById('crate');
-goUp = true;
 
-function createWalls(x, y, width, height, imageID = null, canThrow = false, shouldMove, lower, upper) {
+let stage1 = document.getElementById('stage1')
+let stage2 = document.getElementById('stage2')
+let stage3 = document.getElementById('stage3')
+
+function createWalls(x, y, width, height, imageID = null, canThrow = false, shouldMove, lower, upper, alwaysMove) {
     wall = {
+        goUp: true,
         origin: [x, y],
         dimensions: [width, height],
         image: imageID,
@@ -16,6 +20,8 @@ function createWalls(x, y, width, height, imageID = null, canThrow = false, shou
         P2OnPlatform: false,
         isOn: true,
         onTopWall: null,
+        alwaysMove:alwaysMove,
+        
         canMove : shouldMove,
         gravity :1.5,
         canPush : canThrow,
@@ -23,31 +29,32 @@ function createWalls(x, y, width, height, imageID = null, canThrow = false, shou
         Draw(){
 
            
-            if ((this.P1OnPlatform || this.P2OnPlatform) && this.canMove){
+            if ((this.alwaysMove || this.P1OnPlatform || this.P2OnPlatform) && this.canMove){
+
              
-                if (goUp){
-                this.origin[1]--;
-                //console.log(goUp);
+                if (this.goUp){
+                this.origin[1] += -1;
+                //console.log(this.goUp);
 
                 }
                 else{
 
-                    this.origin[1]++;
+                    this.origin[1] += 1;
                 }
 
                 if (lower > this.origin[1]){
                     
-                  goUp = false;
+                  this.goUp = false;
                 }
                 if (upper  < this.origin[1] ){
-                    console.log(goUp);
+                    console.log(this.goUp);
 
-                    goUp = true;
+                    this.goUp = true;
                 }
             }
             else{
                 if (upper > this.origin[1] ){
-                    this.origin[1]++;
+                    this.origin[1] += 1;
                 }
             }
             if (imageID !== null){
@@ -91,6 +98,8 @@ function isOnTop() {
         }
     })
 }
+/*       CODE FOR PICKING THE LEVELS                     */
+
 function levelOne () {
     //draw  first 
     createWalls(50,500,100,20, platformImg);
@@ -118,7 +127,7 @@ function levelOne () {
  
     createWalls(225 , 300 , 70, 20, girderHImg);
     createWalls(255 , 260 , 20, 70, girderVImg);
-    createWalls(340 , 300 , 75 , 20, platform2Img,false,true, 220, 350);
+    createWalls(340 , 300 , 75 , 20, platform2Img,false,true, 220, 340);
     createWalls(485 , 300 , 70 , 20, girderHImg);
     createWalls(500 , 260 , 20 , 70, girderVImg);
  
@@ -133,14 +142,16 @@ function levelTwo () {
     //draw  first 
     createWalls(50,500,100,20, platformImg);
     createWalls(100 ,480 ,20 ,20,crateImg, true);
-     createWalls(200,200,100,20, platformImg);
-     createWalls(250,180 ,20,20,crateImg, true);
+     createWalls(200,150,100,20, platformImg, false, true, 150, 300, true);
+     createWalls(250,130 ,20,20,crateImg, true, true, 120, 280, true);
     createWalls(350 ,500,100,20, platformImg);
     createWalls(400 ,480 ,20 ,20,crateImg, true);
-    createWalls(500 ,200,100,20, platformImg);
-    createWalls(550 ,180,20,20,crateImg, true);
+    createWalls(500 ,300,100,20, platformImg, false,true, 150, 300, true);
+    createWalls(550 ,280,20,20,crateImg, true, true, 130, 280, true);
     createWalls(650,500,100,20, platformImg);
     createWalls(660,480 ,20,20,crateImg, true);
+    createWalls(350,150,100,20, platformImg);
+
  
     //draw second
     // createWalls(115 , 400 , 75 , 20, platformImg);
@@ -158,10 +169,10 @@ function levelTwo () {
     // createWalls(255 , 260 , 20 , 40);
   //  createWalls(50  , 300 , 75 , 20, platformImg,false,true, 220, 380);
 //   createWalls(550 ,480,20,20,crateImg, true);
-  createWalls(150  , 300 , 20 , 20, crateImg,false,true, 220, 380);
-  createWalls(250  , 300 , 20 , 20, crateImg,false,true, 220, 380);
-  createWalls(450  , 300 , 20 , 20, crateImg,false,true, 220, 380);
-  createWalls(550  , 300 , 20 , 20, crateImg,false,true, 220, 380);
+  createWalls(200, 300 , 20 , 20, crateImg,false,true, 220, 400);
+  createWalls(300, 300 , 20 , 20, crateImg,false,true, 220, 400);
+  createWalls(500, 300 , 20 , 20, crateImg,false,true, 220, 400);
+  createWalls(600, 300 , 20 , 20, crateImg,false,true, 220, 400);
 
 
     //createWalls(150  , 300 , 75 , 20, platformImg,false,true, 220, 380);
@@ -182,7 +193,7 @@ function levelTwo () {
 function levelThree () {
     //draw  first 
      createWalls(150,400,100,20, platformImg);
-    createWalls(100 ,480 ,20 ,20,crateImg, false);
+    createWalls(50,480 ,20 ,20,crateImg, false);
 // createWalls(200,500,100,20, platformImg);
     createWalls(255,480 ,20,20,crateImg, false);
     // createWalls(350 ,500,100,20, platformImg);
