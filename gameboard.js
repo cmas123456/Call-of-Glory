@@ -5,9 +5,7 @@ let girderHImg = document.getElementById('girderH');
 let girderVImg = document.getElementById('girderV');
 let crateImg = document.getElementById('crate');
 
-let stage1 = document.getElementById('stage1')
-let stage2 = document.getElementById('stage2')
-let stage3 = document.getElementById('stage3')
+
 
 let stage1But = document.getElementById('stage1But')
 let stage2But = document.getElementById('stage2But')
