@@ -1,4 +1,5 @@
-  
+  let requestID;
+
 const source = document.createElement('canvas') //creates the canvas
 function assignAttributes(element, attributes) {
 	Object.keys(attributes).forEach(key => element.setAttribute(key, attributes[key]))
@@ -8,7 +9,7 @@ let winConP1 = document.getElementById('winConP1')
 let winConP2 = document.getElementById('winConP2')
 
 let playAgainBut = document.createElement('button')
-        
+let shouldStart = false;
 
 assignAttributes(source, { // this makes the canvas fit in the window
     id: 'source',
@@ -21,6 +22,8 @@ document.body.appendChild(source) // adds the canvas to the webpage
 const context = source.getContext('2d', {alpha: 'false'})
 
 function startMenu(){
+
+    
     context.fillStyle = "#1d314a";
     context.fillRect(0, 0, source.width, source.height);
     context.drawImage(stage1, 50,400, 200, 150)
@@ -31,37 +34,125 @@ function startMenu(){
     document.body.appendChild(stage3But);
 
     stage1But.addEventListener('click', () => {
+        window.cancelAnimationFrame(requestID);
+
+       shouldStart  = true;
+        console.log(shouldStart)
+        levelWalls = [];
+        bulletArray = [];
+        currentPlayers = [];
+        counter = 0;
+        gravity = .1;
+        playerCreate(50,200,1);   
+        playerCreate(650,200,2);
+        
         levelOne();
+
         gameLoop();
     })
     stage2But.addEventListener('click', () => {
-        levelTwo();
-        gameLoop();
+        window.cancelAnimationFrame(requestID);
+
+        shouldStart  = true;
+
+        levelWalls = [];
+        bulletArray = [];
+        currentPlayers = [];
+        playerCreate(50,200,1);   
+        playerCreate(650,200,2);
+         levelTwo();
+      gameLoop();
     })
     stage3But.addEventListener('click', ()=> {
+        window.cancelAnimationFrame(requestID);
+
+        shouldStart  = true;
+
+      
+        levelWalls = [];
+        bulletArray = []; 
+        currentPlayers = [];
+        playerCreate(50,200,1);   
+        playerCreate(650,200,2);
         levelThree();
-        gameLoop();
+       gameLoop();
     })
 
+
+   // gameLoop();
+    
+    
+  
+  
+   
+
 }
+
+
 
 
 function endGame(){
     context.clearRect(0, 0, context.width, context.height)
     context.fillStyle = "#1d314a";
     context.fillRect(0, 0, source.width, source.height);
+
+   window.cancelAnimationFrame(requestID);
+
+    startMenu();
     if(currentPlayers[0].score > currentPlayers[1].score)
     {
         context.font = "50px Amatic";
         context.fillStyle = 'red'
         context.fillText("Player 1 is the WINNER!!!", 100, 200);
+
+        currentPlayers[0].score = 0;
+        currentPlayers[1].score = 0;
+
+
+        // context.drawImage(stage1, 50,400, 200, 150)
+        // context.drawImage(stage2, 300,400, 200,150)
+        // context.drawImage(stage3, 550,400, 200,150)
+
+
+        // document.body.appendChild(stage1But);
+        // document.body.appendChild(stage2But);
+        // document.body.appendChild(stage3But);
+
+        // stage1But.addEventListener('click', () => {
+        //     levelOne();
+        //     gameLoop();
+        // })
+        // stage2But.addEventListener('click', () => {
+        //     levelTwo();
+        //     gameLoop();
+        // })
+        // stage3But.addEventListener('click', ()=> {
+        //     levelThree();
+        //     gameLoop();
+        // })
+
+
     
     }
     else if(currentPlayers[0].score < currentPlayers[1].score)
     {
+
+        currentPlayers[0].score = 0;
+        currentPlayers[1].score = 0;
+
         context.font = "50px Amatic";
         context.fillStyle = 'red'
         context.fillText("Player 2 is the WINNER!!!", 100, 200);
+
+        // document.body.appendChild(stage1But);
+        // document.body.appendChild(stage2But);
+        // document.body.appendChild(stage3But);
+        
+        // context.drawImage(stage1, 50,400, 200, 150)
+        // context.drawImage(stage2, 300,400, 200,150)
+        // context.drawImage(stage3, 550,400, 200,150)
+
+     
     }
 }
 
@@ -346,7 +437,7 @@ function gameLoop() {
     context.fillText(score1.textContent, (source.width/4) - 75, 50);
     context.fillText(score2.textContent, (source.width/3) * 2, 50);
 
-    window.requestAnimationFrame(gameLoop);
+    requestID = window.requestAnimationFrame(gameLoop);
 }
 else if(currentPlayers[0].score >= 5 || currentPlayers[1].score >= 5)
 {
@@ -363,5 +454,8 @@ window.addEventListener('gamepaddisconnected', event => {
     console.log(event.gamepad);
 })
 
+
 startMenu();
+
+
 //gameLoop();

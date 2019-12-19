@@ -224,9 +224,7 @@ function playerCreate(x,y,playerID = 1) {
                     this.jumpCounter += .3;
                     this.velocity[1] -= this.jumpCounter;
 
-                    if (this.isAi &&this.movingOver){
-                        this.origin[0]++;
-                    }
+            
                     
                     if (this.jumpCounter > 1.2) {
                         this.jumpCounter = 0;
