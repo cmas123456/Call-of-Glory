@@ -1,4 +1,6 @@
   
+let requestID;
+
 const source = document.createElement('canvas') //creates the canvas
 function assignAttributes(element, attributes) {
 	Object.keys(attributes).forEach(key => element.setAttribute(key, attributes[key]))
@@ -6,6 +8,8 @@ function assignAttributes(element, attributes) {
 
 let winConP1 = document.getElementById('winConP1')
 let winConP2 = document.getElementById('winConP2')
+
+let buttondiv = document.getElementById('buttondiv')
 
 let playAgainBut = document.createElement('button')
         
@@ -21,32 +25,69 @@ document.body.appendChild(source) // adds the canvas to the webpage
 const context = source.getContext('2d', {alpha: 'false'})
 
 function startMenu(){
+    document.body.appendChild(buttondiv);
+    buttondiv.style.backgroundColor = "grey";
+
+buttondiv.style.display = "inline-block";
+buttondiv.style.height = "50px";
+buttondiv.style.width = "800px";
+//buttondiv.style.margin = "100px";
+buttondiv.style.marginTop = "10px";
+buttondiv.style.marginBottom = "10px";
+buttondiv.style.alignItems = "center";
+buttondiv.style.justifyContent = "center";
+stage1But.style.marginLeft = "100px";
+stage1But.style.marginTop = "10px";
+stage1But.style.marginRight = "100px";
+stage2But.style.marginLeft = "100px";
+stage2But.style.marginTop = "10px";
+stage2But.style.marginRight = "100px";
+stage3But.style.marginLeft = "100px";
+stage3But.style.marginTop = "10px";    
+stage3But.style.marginRight = "100px";
+
     context.fillStyle = "#1d314a";
     context.fillRect(0, 0, source.width, source.height);
     context.drawImage(stage1, 50,400, 200, 150)
     context.drawImage(stage2, 300,400, 200,150)
     context.drawImage(stage3, 550,400, 200,150)
-    document.body.appendChild(stage1But);
-    document.body.appendChild(stage2But);
-    document.body.appendChild(stage3But);
 
-    stage1But.addEventListener('click', () => {
+    stage1But.onclick = () => {
+        window.cancelAnimationFrame(requestID)
+        levelWalls = [];
+        bulletArray = [];
+        currentPlayers = [];
+        playerCreate(50,200,1);   
+        playerCreate(650,200,2);
         levelOne();
         gameLoop();
-    })
-    stage2But.addEventListener('click', () => {
+    }
+    stage2But.onclick = () => {
+        window.cancelAnimationFrame(requestID)
+        levelWalls = [];
+        bulletArray = [];
+        currentPlayers = [];
+        playerCreate(50,200,1);   
+        playerCreate(650,200,2);
         levelTwo();
         gameLoop();
-    })
-    stage3But.addEventListener('click', ()=> {
+    }
+    stage3But.onclick = ()=> {
+        window.cancelAnimationFrame(requestID)
+        levelWalls = [];
+        bulletArray = [];
+        currentPlayers = [];
+        playerCreate(50,200,1);   
+        playerCreate(650,200,2);
         levelThree();
         gameLoop();
-    })
+    }
 
 }
 
 
 function endGame(){
+    window.cancelAnimationFrame(requestID);
     context.clearRect(0, 0, context.width, context.height)
     context.fillStyle = "#1d314a";
     context.fillRect(0, 0, source.width, source.height);
@@ -346,7 +387,7 @@ function gameLoop() {
     context.fillText(score1.textContent, (source.width/4) - 75, 50);
     context.fillText(score2.textContent, (source.width/3) * 2, 50);
 
-    window.requestAnimationFrame(gameLoop);
+    requestID = window.requestAnimationFrame(gameLoop);
 }
 else if(currentPlayers[0].score >= 5 || currentPlayers[1].score >= 5)
 {
