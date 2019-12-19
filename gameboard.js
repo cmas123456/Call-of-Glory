@@ -9,6 +9,23 @@ let stage1 = document.getElementById('stage1')
 let stage2 = document.getElementById('stage2')
 let stage3 = document.getElementById('stage3')
 
+let stage1But = document.getElementById('stage1But')
+let stage2But = document.getElementById('stage2But')
+let stage3But = document.getElementById('stage3But')
+
+function changeSizeBig(el)
+        {   
+            console.log("help!!!");
+            el.style.width = "300px";
+            el.style.height = "225px";
+        }
+
+function changeSizeSmall(el)
+        {
+            el.style.width = "200px";
+            el.style.height = "150px";
+        }
+
 function createWalls(x, y, width, height, imageID = null, canThrow = false, shouldMove, lower, upper, alwaysMove) {
     wall = {
         goUp: true,
@@ -228,6 +245,3 @@ function levelThree () {
     // //draw top 
     // createWalls(355 ,  125 , 35, 20);
 }
- levelOne();
-//levelTwo();
-//levelThree();

@@ -4,10 +4,17 @@ function assignAttributes(element, attributes) {
 	Object.keys(attributes).forEach(key => element.setAttribute(key, attributes[key]))
 }
 
+let winConP1 = document.getElementById('winConP1')
+let winConP2 = document.getElementById('winConP2')
+
+let playAgainBut = document.createElement('button')
+        
+
 assignAttributes(source, { // this makes the canvas fit in the window
     id: 'source',
 	height: 600,
-	width: 800,
+    width: 800,
+    style: 'zindex: -1, position: relative'
 })
 
 document.body.appendChild(source) // adds the canvas to the webpage
@@ -16,28 +23,47 @@ const context = source.getContext('2d', {alpha: 'false'})
 function startMenu(){
     context.fillStyle = "#1d314a";
     context.fillRect(0, 0, source.width, source.height);
-    context.drawImage(stage1, 50,350, 200, 150)
-    context.drawImage(stage2, 300,350, 200,150)
-    context.drawImage(stage3, 550,350, 200,150)
+    context.drawImage(stage1, 50,400, 200, 150)
+    context.drawImage(stage2, 300,400, 200,150)
+    context.drawImage(stage3, 550,400, 200,150)
+    document.body.appendChild(stage1But);
+    document.body.appendChild(stage2But);
+    document.body.appendChild(stage3But);
 
-//ctx.addEventListener(onclick)
+    stage1But.addEventListener('click', () => {
+        levelOne();
+        gameLoop();
+    })
+    stage2But.addEventListener('click', () => {
+        levelTwo();
+        gameLoop();
+    })
+    stage3But.addEventListener('click', ()=> {
+        levelThree();
+        gameLoop();
+    })
+
 }
 
-function changeSize(event)
-        {   
-            console.log("help!!!");
-            event.style.width = 300;
-            //let display = document.getElementById(x)
-            event.style.height = 225;
-            console.log(event)
-        }
 
-function changeSize1(event)
-        {
-            event.style.width = 200;
-            //let display = document.getElementById(x)
-            event.style.height = 150;
-        }
+function endGame(){
+    context.clearRect(0, 0, context.width, context.height)
+    context.fillStyle = "#1d314a";
+    context.fillRect(0, 0, source.width, source.height);
+    if(currentPlayers[0].score > currentPlayers[1].score)
+    {
+        context.font = "50px Amatic";
+        context.fillStyle = 'red'
+        context.fillText("Player 1 is the WINNER!!!", 100, 200);
+    
+    }
+    else if(currentPlayers[0].score < currentPlayers[1].score)
+    {
+        context.font = "50px Amatic";
+        context.fillStyle = 'red'
+        context.fillText("Player 2 is the WINNER!!!", 100, 200);
+    }
+}
 
 let score1 = document.getElementById("scores1");
 let score2 = document.getElementById("scores2");
@@ -128,6 +154,8 @@ function movePlayer (){
 }
 function gameLoop() {
     const gamepads = navigator.getGamepads();
+    if (currentPlayers[0].score < 5 && currentPlayers[1].score < 5)
+    {
 
     if(gamepads[0]) {
         const gamepadState ={
@@ -320,6 +348,11 @@ function gameLoop() {
 
     window.requestAnimationFrame(gameLoop);
 }
+else if(currentPlayers[0].score >= 5 || currentPlayers[1].score >= 5)
+{
+    endGame();
+}
+}
 
 window.addEventListener('gamepadconnected', event => {
     console.log('Gamepad connected');
@@ -330,5 +363,5 @@ window.addEventListener('gamepaddisconnected', event => {
     console.log(event.gamepad);
 })
 
-//startMenu();
-gameLoop();
+startMenu();
+//gameLoop();
