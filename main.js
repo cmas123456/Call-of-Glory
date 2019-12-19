@@ -6,6 +6,7 @@ function assignAttributes(element, attributes) {
 	Object.keys(attributes).forEach(key => element.setAttribute(key, attributes[key]))
 }
 
+let callOfGlory = document.getElementById('callofglory')
 let winConP1 = document.getElementById('winConP1')
 let winConP2 = document.getElementById('winConP2')
 
@@ -25,29 +26,32 @@ document.body.appendChild(source) // adds the canvas to the webpage
 const context = source.getContext('2d', {alpha: 'false'})
 
 function startMenu(){
+    let stage1 = document.getElementById('stage1')
+    let stage2 = document.getElementById('stage2')
+    let stage3 = document.getElementById('stage3')
     document.body.appendChild(buttondiv);
     buttondiv.style.backgroundColor = "grey";
-
-buttondiv.style.display = "inline-block";
-buttondiv.style.height = "50px";
-buttondiv.style.width = "800px";
-//buttondiv.style.margin = "100px";
-buttondiv.style.marginTop = "10px";
-buttondiv.style.marginBottom = "10px";
-buttondiv.style.alignItems = "center";
-buttondiv.style.justifyContent = "center";
-stage1But.style.marginLeft = "100px";
-stage1But.style.marginTop = "10px";
-stage1But.style.marginRight = "100px";
-stage2But.style.marginLeft = "100px";
-stage2But.style.marginTop = "10px";
-stage2But.style.marginRight = "100px";
-stage3But.style.marginLeft = "100px";
-stage3But.style.marginTop = "10px";    
-stage3But.style.marginRight = "100px";
-
+    
+    buttondiv.style.display = "inline-block";
+    buttondiv.style.height = "50px";
+    buttondiv.style.width = "800px";
+    buttondiv.style.marginTop = "10px";
+    buttondiv.style.marginBottom = "10px";
+    buttondiv.style.alignItems = "center";
+    buttondiv.style.justifyContent = "center";
+    stage1But.style.marginLeft = "100px";
+    stage1But.style.marginTop = "10px";
+    stage1But.style.marginRight = "100px";
+    stage2But.style.marginLeft = "100px";
+    stage2But.style.marginTop = "10px";
+    stage2But.style.marginRight = "100px";
+    stage3But.style.marginLeft = "100px";
+    stage3But.style.marginTop = "10px";    
+    stage3But.style.marginRight = "100px";
+    
     context.fillStyle = "#1d314a";
     context.fillRect(0, 0, source.width, source.height);
+    context.drawImage(callOfGlory, 100, 50, 600, 250)
     context.drawImage(stage1, 50,400, 200, 150)
     context.drawImage(stage2, 300,400, 200,150)
     context.drawImage(stage3, 550,400, 200,150)
